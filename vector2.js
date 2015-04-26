@@ -1,4 +1,4 @@
-var Vector2 = function()
+/*var Vector2 = function()
 {
 	this.x = 0;
 	this.y = 0;
@@ -26,11 +26,5 @@ Vector2.prototype.subtract = function(x, y)
 
 Vector2.prototype.multiply = function(x,y)
 {
-
-}
-
-
-
-
-
-
+	
+}*/
