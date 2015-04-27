@@ -1,4 +1,4 @@
-/*var Enemy = function()
+var Enemy = function()
 {
 	this.image = document.createElement("img");
 	this.x = 500;
@@ -21,4 +21,4 @@ Enemy.prototype.draw = function()
 		context.translate(this.x, this.y);
 		context.drawImage(this.image, -this.width/2, -this.height/2);
 	context.restore();
-}*/
+}

@@ -1,4 +1,4 @@
-/*var Player = function()
+var Player = function()
 {
 	this.image = document.createElement("img");
 	this.x = canvas.width/2;
@@ -31,4 +31,4 @@ Player.prototype.draw = function()
 		context.rotate(this.rotation);
 		context.drawImage(this.image, -this.width/2, -this.height/2);
 	context.restore();
-}*/
+}

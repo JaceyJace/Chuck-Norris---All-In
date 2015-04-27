@@ -1,4 +1,4 @@
-var Collision = function(deltaTime)
+/*var Collision = function(deltaTime)
 {
 	if(this.y2 + this.h2 < this.y1 ||
 		this.x2 + this.w2 < this.x1 ||
