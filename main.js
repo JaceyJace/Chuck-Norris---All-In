@@ -32,6 +32,9 @@ function getDeltaTime()
 var SCREEN_WIDTH = canvas.width;
 var SCREEN_HEIGHT = canvas.height;
 
+//Load the image to use for the level tiles
+var tileset = document.createElement("img")
+tileset.src = "tileset.png"
 
 // some variables to calculate the Frames Per Second (FPS - this tells use
 // how fast our game is running, and allows us to make the game run at a 
@@ -40,13 +43,14 @@ var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
 
+
 //var vector2 = new Vector2();
 var player = new Player();
 var enemy = new Enemy();
 var keyboard = new Keyboard();
 //var bullet = new Bullet();
 var LAYER_COUNT = 3;
-var MAP = {tw:20, th:15};
+var MAP = {tw:70, th:15};
 var TILE = 35;
 var TILESET_TILE = TILE * 2;
 var TILESET_PADDING = 2;
@@ -54,9 +58,7 @@ var TILESET_SPACING = 2;
 var TILESET_COUNT_X = 14;
 var TILESET_COUNT_Y = 14;
 
-//Load the image to use for the level tiles
-var tileset = document.createElement("img")
-tileset.src = "tileset.png"
+
 
 function drawMap()
 {
@@ -76,7 +78,7 @@ function drawMap()
 					var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y))* (TILESET_TILE + TILESET_SPACING);
 					context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE, x*TILE, (y-1)*TILE, TILESET_TILE, TILESET_TILE);
 				}
-				idx++
+				idx++;
 			}
 		}
 	}
