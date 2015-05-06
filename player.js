@@ -2,7 +2,7 @@ var Player = function()
 {
 	this.image = document.createElement("img");
 	this.position = new Vector2();
-	this.position.set(9*TILE, 0*TILE);
+	this.position.set(9*35, 0*35);
 
 	this.width = 159;
 	this.height = 163;
@@ -10,7 +10,7 @@ var Player = function()
 	this.offset = new Vector2();
 	this.offset.set(-55, -87);
 
-	this.velocity = new Vector2();
+	this.velocity = new Vector2(0,0);
 
 	this.falling = true;
 	this.jumping = false;
@@ -50,7 +50,7 @@ Player.prototype.update = function(deltaTime)
 		ddx = ddx + FRICTION;	//player was going left, but not anymore
 
 	if(right)
-		ddx = ddx - ACCEL;		//player wants to go right
+		ddx = ddx + ACCEL;		//player wants to go right
 	else if(wasright)
 		ddx = ddx - FRICTION;	//player was going left, but not anymore
 
