@@ -106,7 +106,7 @@ function bound(value, min, max)
 }
 
 var LAYER_BACKGROUND = 0; //CHECK
-var LAYER_PLATFORMS = 2; //CHECK
+var LAYER_PLATFORMS = 1; //CHECK
 var LAYER_LADDERS = 3; //CHECK
 var LAYER_COUNT = 3;
 var MAP = {tw:70, th:15};
