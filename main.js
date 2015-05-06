@@ -43,6 +43,8 @@ var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
 
+//set tile
+var TILE = 35;
 //abitrary choice for 1m
 var METER = TILE;
 //very exaggerated gravity (6x)
@@ -108,7 +110,6 @@ var LAYER_PLATFORMS = 2; //CHECK
 var LAYER_LADDERS = 3; //CHECK
 var LAYER_COUNT = 3;
 var MAP = {tw:70, th:15};
-var TILE = 35;
 var TILESET_TILE = TILE * 2;
 var TILESET_PADDING = 2;
 var TILESET_SPACING = 2;

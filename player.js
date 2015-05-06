@@ -41,7 +41,7 @@ Player.prototype.update = function(deltaTime)
 	var wasleft = this.velocity.x < 0;
 	var wasright = this.velocity.x > 0;
 	var falling = this.falling;
-	var ddx = 0;		//acceleration
+	var ddx = 0;				//acceleration
 	var ddy = GRAVITY;
 
 	if(left)
@@ -104,9 +104,9 @@ Player.prototype.update = function(deltaTime)
 			ny = 0;							//no longer overlaps the cells below
 		}
 	}
-	else if (this.velocityy < 0)
+	else if (this.velocity.y < 0)
 	{
-		if((cell && !celldown) || (cellright && celldiag && nx))
+		if((cell && !celldown) || (cellright && !celldiag && nx))
 		{
 			//clamp the y position to avoid jumping into platform above
 			this.position.y = tileToPixel(ty + 1);
