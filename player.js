@@ -64,7 +64,7 @@ Player.prototype.update = function(deltaTime)
 	this.position.y = Math.floor(this.position.y + (deltaTime * this.velocity.y));
 	this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
 	this.velocity.x = bound(this.velocity.x + (deltaTime * ddx), -MAXDX, MAXDX);
-	this.velocity.y = bound(this.velocity.y + (deltaTime * ddy), -MAYDY, MAXDY);
+	this.velocity.y = bound(this.velocity.y + (deltaTime * ddy), -MAXDY, MAXDY);
 
 	if ((wasleft && (this.velocity.x > 0)) ||
 		(wasright && (this.velocity.x < 0)))
@@ -84,10 +84,10 @@ Player.prototype.update = function(deltaTime)
 	var ty = pixelToTile(this.position.y);
 	var nx = (this.position.x)%TILE;
 	var ny = (this.position.y)%TILE;
-	var cell = cellAtTimeCoord(LAYER_PLATFORMS, tx, ty);
-	var cellright = cellAtTimeCoord(LAYER_PLATFORMS, tx + 1, ty);
-	var celldown = cellAtTimeCoord(LAYER_PLATFORMS, tx, ty + 1);
-	var celldiag = cellAtTimeCoord(LAYER_PLATFORMS, tx + 1, ty + 1);
+	var cell = cellAtTileCoord(LAYER_PLATFORMS, tx, ty);
+	var cellright = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty);
+	var celldown = cellAtTileCoord(LAYER_PLATFORMS, tx, ty + 1);
+	var celldiag = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty + 1);
 
 	//if the player has vertical velocity, then check to see if they have hit
 	//a platform below or above, in which case, stop their vertical velocity, 

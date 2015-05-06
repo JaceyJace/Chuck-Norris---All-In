@@ -71,7 +71,7 @@ function cellAtPixelCoord(layer, x, y)
 	//let the player drop of the bottom of the screen(this means death)
 	if(y>SCREEN_HEIGHT)
 		return 0;
-	return cellAtTilecoord(layer, p2t(x), p2t(y));
+	return cellAtTileCoord(layer, p2t(x), p2t(y));
 };
 
 function cellAtTileCoord(layer, tx, ty)
@@ -84,7 +84,7 @@ function cellAtTileCoord(layer, tx, ty)
 	return cells[layer][ty][tx];
 };
 
-function tiletoPixel(tile)
+function tileToPixel(tile)
 {
 	return tile * TILE;
 };
@@ -139,19 +139,19 @@ function drawMap()
 	}
 }
 
-var cells = []  //holds simplified collision data
+var cells = [];  //holds simplified collision data
 function initialize()
 {
 	for (var layerIdx = 0; layerIdx < LAYER_COUNT; layerIdx++)
 	{
 		cells [layerIdx] = [];
-		var Idx = 0;
+		var idx = 0;
 		for(var y = 0; y < level1.layers[layerIdx].height; y++)
 		{
 			cells[layerIdx][y] = []
 			for(var x = 0; x < level1.layers[layerIdx].width; x++)
 			{
-				if(level1.layers[layerIdx].data[Idx] != 0)
+				if(level1.layers[layerIdx].data[idx] != 0)
 				{
 					//for each tile we fond - need 4 collisions because our collisoin squares are 35x35, but the level tile are 75x75
 					cells[layerIdx][y][x] = 1;
@@ -164,7 +164,7 @@ function initialize()
 					cells[layerIdx][y][x] = 0;
 					//if we haven't set this cells value then set it now to 0.
 				}
-				Idx++;
+				idx++;
 			}
 		}
 	}
