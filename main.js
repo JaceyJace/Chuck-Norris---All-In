@@ -178,12 +178,6 @@ function run()
 	
 	var deltaTime = getDeltaTime();
 	
-	/*position.set(x,y);
-	position.normalize(x,y);
-	position.add(x,y);
-	position.subtract(x,y);
-	position.multiply(x,y);*/
-
 	player.update(deltaTime);
 	player.draw();
 
