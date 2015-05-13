@@ -43,6 +43,12 @@ var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
 
+var position = new Vector2();
+var player = new Player();
+var enemy = new Enemy();
+var keyboard = new Keyboard();
+//var bullet = new Bullet();
+
 //set tile
 var TILE = 35;
 //abitrary choice for 1m
@@ -59,12 +65,6 @@ var ACCEL = MAXDX * 2;
 var FRICTION = MAXDX * 6;
 //(a large) instanteous jump impulse
 var JUMP = METER * 1500;
-
-var position = new Vector2();
-var player = new Player();
-var enemy = new Enemy();
-var keyboard = new Keyboard();
-//var bullet = new Bullet();
 
 function cellAtPixelCoord(layer, x, y)
 {
@@ -178,13 +178,13 @@ function run()
 	
 	var deltaTime = getDeltaTime();
 	
+	drawMap();
+
 	player.update(deltaTime);
 	player.draw();
 
 	/*enemy.update(deltaTime);
 	enemy.draw();*/
-
-	drawMap();
 
 	// update the frame counter 
 	fpsTime += deltaTime;
@@ -202,7 +202,7 @@ function run()
 	context.fillText("FPS: " + fps, 5, 20, 100);
 }
  
- initialize();
+initialize();
 
 //-------------------- Don't modify anything below here
 
