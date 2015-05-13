@@ -181,8 +181,8 @@ function run()
 	player.update(deltaTime);
 	player.draw();
 
-	enemy.update(deltaTime);
-	enemy.draw();
+	/*enemy.update(deltaTime);
+	enemy.draw();*/
 
 	drawMap();
 
