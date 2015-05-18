@@ -49,6 +49,12 @@ var enemy = new Enemy();
 var keyboard = new Keyboard();
 //var bullet = new Bullet();
 
+//HUD var
+var score = 0;
+var lives = 3;
+var chuckHead = document.createElement("img");
+	chuckHead.src = "chuckHead.png";
+
 //set tile
 var TILE = 35;
 //abitrary choice for 1m
@@ -116,18 +122,40 @@ var TILESET_SPACING = 2;
 var TILESET_COUNT_X = 14;
 var TILESET_COUNT_Y = 14;
 
+var worldOffsetX = 0;
 function drawMap()
 {
+	
+	var startX = -1;
+	var maxTiles = Math.floor(SCREEN_WIDTH / TILE) + 2;
+	var tileX = pixelToTile(player.position.x);
+	var offsetX = TILE + Math.floor(player.position.x%TILE);
+
+	startX = tileX - Math.floor(maxTiles / 2);
+
+	if(startX < -1)
+	{
+		startX = 0;
+		offsetX = 0;
+	}
+	if(startX > MAP.tw - maxTiles)
+	{
+		startX = MAP.tw - maxTiles + 1;
+		offsetX = TILE;
+	}
+	
+	worldOffsetX = startX * TILE + offsetX;
+
 	for(var layerIdx=0; layerIdx<LAYER_COUNT; layerIdx++)
 	{
-		var idx = 0;
 		for(var y=0; y < level1.layers[layerIdx].height; y++)
 		{
-			for(var x=0; x < level1.layers[layerIdx].width; x++)
+			var idx = y * level1.layers[layerIdx].width + startX;
+			for(var x = startX; x < startX + maxTiles; x++)
 			{
 				if(level1.layers[layerIdx].data[idx] !=0)
 				{
-					//the tiles in the Tiled map are base 1 9meaning a value of 0 means no tile),
+					//the tiles in the Tiled map are base 1 (meaning a value of 0 means no tile),
 					//so subtract one from the tileset to get the correct tile
 					var tileIndex = level1.layers[layerIdx].data[idx]-1;
 					var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X)*(TILESET_TILE + TILESET_SPACING);
@@ -178,13 +206,25 @@ function run()
 	
 	var deltaTime = getDeltaTime();
 	
-	drawMap();
-
 	player.update(deltaTime);
+
+	drawMap();
 	player.draw();
 
 	/*enemy.update(deltaTime);
 	enemy.draw();*/
+	
+	//set the score
+	context.fillStyle = "#f30426"
+	context.font = "18px Arial";
+	var scoreText = "Score: " + score;
+	context.fillText(scoreText, 560, 20)
+
+	//set lives
+	for(var i=0; i<lives; i++)
+	{
+		context.drawImage(chuckHead, 5 + ((chuckHead.width+2)*i), 480)
+	}
 
 	// update the frame counter 
 	fpsTime += deltaTime;
@@ -195,7 +235,7 @@ function run()
 		fps = fpsCount;
 		fpsCount = 0;
 	}		
-		
+	
 	// draw the FPS
 	context.fillStyle = "#f00";
 	context.font="14px Arial";
