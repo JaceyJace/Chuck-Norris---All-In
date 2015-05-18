@@ -17,22 +17,32 @@ var PLAYER_SPEED = 300;
 var Player = function()
 {
 	this.sprite = new Sprite("ChuckNorris.png");
+
+	// idle left
 	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
 		[0, 1 ,2, 3, 4, 5, 6, 7]);
+	//jump left
 	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
 		[8, 9, 10, 11, 12]);
+	//walk left
 	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
 		[13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]);
+	//shoot left
 	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
         [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]);
+	//climb
 	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
         [41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51]);
+	//idle right
 	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
 		[52, 53, 54, 55, 56, 57, 58, 59]);
+	//jump right
 	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
 		[60, 61, 62, 63, 64,]);
+	//walk right
 	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
 		[65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78]);
+	//shoot right
 	 this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
         [79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92]);
 
@@ -42,7 +52,7 @@ var Player = function()
 	}
 
 	this.position = new Vector2();
-	this.position.set(9*35, 0*35);
+	this.position.set(1*35, 5*35);
 
 	this.width = 159;
 	this.height = 163;
@@ -59,11 +69,12 @@ var Player = function()
 
 Player.prototype.update = function(deltaTime)
 {
+	this.sprite.update(deltaTime);
+
 	var left = false;
 	var right = false;
 	var jump = false;
-
-	this.sprite.update(deltaTime);
+	var up = false;
 
 	//check keypress events
 	if(keyboard.isKeyDown(keyboard.KEY_LEFT) == true)
@@ -102,6 +113,12 @@ Player.prototype.update = function(deltaTime)
 	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true)
 	{
 		jump = true;
+	}
+	if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
+	{
+		up = true;
+		if(this.sprite.currentAnimation != ANIM_CLIMB)
+			this.sprite.setAnimation(ANIM_CLIMB);
 	}
 
 	var wasleft = this.velocity.x < 0;

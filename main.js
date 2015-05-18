@@ -125,11 +125,10 @@ var TILESET_COUNT_Y = 14;
 var worldOffsetX = 0;
 function drawMap()
 {
-	
 	var startX = -1;
 	var maxTiles = Math.floor(SCREEN_WIDTH / TILE) + 2;
 	var tileX = pixelToTile(player.position.x);
-	var offsetX = TILE + Math.floor(player.position.x%TILE);
+	var offsetX = TILE + Math.floor(player.position.x % TILE);
 
 	startX = tileX - Math.floor(maxTiles / 2);
 
@@ -160,7 +159,7 @@ function drawMap()
 					var tileIndex = level1.layers[layerIdx].data[idx]-1;
 					var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X)*(TILESET_TILE + TILESET_SPACING);
 					var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y))* (TILESET_TILE + TILESET_SPACING);
-					context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE, x*TILE, (y-1)*TILE, TILESET_TILE, TILESET_TILE);
+					context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE, (x-startX)*TILE - offsetX, (y-1)*TILE, TILESET_TILE, TILESET_TILE);
 				}
 				idx++;
 			}
