@@ -55,6 +55,7 @@ var lives = 3;
 var chuckHead = document.createElement("img");
 	chuckHead.src = "chuckHead.png";
 
+
 //set tile
 var TILE = 35;
 //abitrary choice for 1m
@@ -71,6 +72,31 @@ var ACCEL = MAXDX * 2;
 var FRICTION = MAXDX * 6;
 //(a large) instanteous jump impulse
 var JUMP = METER * 1500;
+
+var LAYER_BACKGROUND = 0; //CHECK
+var LAYER_PLATFORMS = 0; //CHECK
+var LAYER_LADDERS = 1; //CHECK
+var LAYER_WATER = 2;
+var LAYER_DOOR = 3;
+//#4 is var LAYER_OBJECT_ENEMIES = 4 listed below
+var LAYER_COUNT = 5;
+
+var MAP = {tw:70, th:15};
+var TILESET_TILE = TILE * 2;
+var TILESET_PADDING = 2;
+var TILESET_SPACING = 2;
+var TILESET_COUNT_X = 14;
+var TILESET_COUNT_Y = 14;
+
+//enemy stuff
+var ENEMY_MAXDX = METER * 5;
+var ENEMY_ACCEL = ENEMY_MAXDX * 2;
+var enemies = [];
+var LAYER_OBJECT_ENEMIES = 4; // CHECK
+
+//var LAYER_OBJECT_TRIGGERS = 5; //CHECK
+//bullet stuff
+var bullets = [];
 
 function cellAtPixelCoord(layer, x, y)
 {
@@ -111,17 +137,6 @@ function bound(value, min, max)
 	return value;
 }
 
-var LAYER_BACKGROUND = 0; //CHECK
-var LAYER_PLATFORMS = 1; //CHECK
-var LAYER_LADDERS = 3; //CHECK
-var LAYER_COUNT = 3;
-var MAP = {tw:70, th:15};
-var TILESET_TILE = TILE * 2;
-var TILESET_PADDING = 2;
-var TILESET_SPACING = 2;
-var TILESET_COUNT_X = 14;
-var TILESET_COUNT_Y = 14;
-
 var worldOffsetX = 0;
 function drawMap()
 {
@@ -147,6 +162,7 @@ function drawMap()
 
 	for(var layerIdx=0; layerIdx<LAYER_COUNT; layerIdx++)
 	{
+		var idx = 0;
 		for(var y=0; y < level1.layers[layerIdx].height; y++)
 		{
 			var idx = y * level1.layers[layerIdx].width + startX;
@@ -167,7 +183,10 @@ function drawMap()
 	}
 }
 
+var musicBackground;
+var sfxFire;
 var cells = [];  //holds simplified collision data
+
 function initialize()
 {
 	for (var layerIdx = 0; layerIdx < LAYER_COUNT; layerIdx++)
@@ -181,7 +200,7 @@ function initialize()
 			{
 				if(level1.layers[layerIdx].data[idx] != 0)
 				{
-					//for each tile we fond - need 4 collisions because our collisoin squares are 35x35, but the level tile are 75x75
+					//for each tile we found - need 4 collisions because our collision squares are 35x35, but the level tile are 75x75
 					cells[layerIdx][y][x] = 1;
 					cells[layerIdx][y-1][x] = 1;
 					cells[layerIdx][y-1][x+1] = 1;
@@ -195,7 +214,57 @@ function initialize()
 				idx++;
 			}
 		}
+		//add enemies
+		idx = 0;
+		for(var y = 0; y < level1.layers[LAYER_OBJECT_ENEMIES].height; y++)
+		{
+			for(var x = 0; x < level1.layers[LAYER_OBJECT_ENEMIES].width; x++)
+			{
+				if(level1.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0)
+				{
+					var px = tileToPixel(x);
+					var py = tileToPixel(y);
+					var e = new Enemy(px, py);
+					enemies.push(e);
+				}
+				idx++;
+			}
+		}
+		//add ladder
+		idx = 0;
+		for(var y = 0; y < level1.layers[LAYER_LADDERS].height; y++)
+		{
+			for(var x = 0; x < level1.layers[LAYER_LADDERS].width; x++)
+			{
+				if(level1.layers[LAYER_LADDERS].data[idx] != 0)
+				{
+					var px = tileToPixel(x);
+					var py = tileToPixel(y);
+					var e = new Player(px, py);
+				}
+				idx++;
+			}
+		}
 	}
+	musicBackground = new Howl(
+	{
+		urls: ["background.ogg"],
+		loops: true,
+		buffer: true,
+		volume: 0.5
+	});
+	musicBackground.play();
+
+	sfxFire = new Howl(
+	{
+		urls: ["fireEffect.ogg"],
+		buffer: true,
+		volume: 1,
+		onend: function() 
+		{
+			isSfxPlaying = false;
+		}
+	});
 }
 
 function run()
@@ -206,19 +275,59 @@ function run()
 	var deltaTime = getDeltaTime();
 	
 	player.update(deltaTime);
+	for(var i=0; i<enemies.length; i++)
+	{
+		enemies[i].update(deltaTime);
+	}
 
-	drawMap();
-	player.draw();
+	//update bullets
+	var hit = false;
+	for(var i=0; i<bullets.length; i++)
+	{
+		bullets[i].update(deltaTime);
+		if(bullets[i].position.x - worldOffsetX < 0 ||
+			bullets[i].position.x - worldOffsetX > SCREEN_WIDTH)
+		{
+			hit = true;
+		}
 
-	/*enemy.update(deltaTime);
-	enemy.draw();*/
-	
+		for(var j=0; j<enemies.length; j++)
+		{
+			if(intersects(bullets[i].position.x, bullets[i].position.y, TILE, TILE,
+				enemies[j].position.x, enemies[j].position.y, TILE, TILE)== true)
+			{
+				//kill both bullet and enemy
+				enemies.splice(j, 1);
+				hit = true;
+				//increment score
+				score += 1;
+				break;
+			}
+		}
+		if(hit == true)
+		{
+			bullets.splice(i, 1);
+			break;
+		}
+	}
+
 	//set the score
 	context.fillStyle = "#f30426"
 	context.font = "18px Arial";
 	var scoreText = "Score: " + score;
 	context.fillText(scoreText, 560, 20)
-
+	drawMap();
+	player.draw();
+	for(var i=0; i<enemies.length; i++)
+	{
+		enemies[i].draw(deltaTime);
+	}
+	
+	for(var i=0; i<bullets.length; i++)
+	{
+		bullets[i].draw(deltaTime);
+	}
+	
 	//set lives
 	for(var i=0; i<lives; i++)
 	{

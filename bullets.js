@@ -1,95 +1,30 @@
-/*var Bullet = function()
+var Bullet = function(x, y, moveRight)
 {
-	this.image = document.createElement("img");
-	this.x = canvas.width/2;
-	this.y = canvas.height/2;
-	this.width = 23;
-	this.height = 8;
-	this.shoot = false;
-	this.image.src = "bullet.png";
+	this.sprite = new Sprite("bullet.png");
+	this.sprite.buildAnimation(1, 1, 32, 32, 8, -1, [0]);
+	this.sprite.setAnimationOffset(0, 0, 0);
+	this.sprite.setLoop(0, false);
+
+	this.position = new Vector2();
+	this.position.set(x, y);
+
+	this.velocity = new Vector2();
+
+	this.moveRight = moveRight;
+	if(this.moveRight == true)
+		this.velocity.set(MAXDX * 2, 0);
+	else
+		this.velocity.set(-MAXDX * 2, 0);
 }
-
-Bullet = new Array();
-var shootTimer = 1;
-var BULLET_SPEED = 3
-
-Bullet.prototype.playerShoot = function()
-{
-//start off with a velocity that shoots the bullet straight up
-	var this.velX = 0;
-	var this.velY = 1;
-	
-	//now rotate this vector according to the ship's current rotation
-	var this.s = Math.sin(player.rotation);
-	var this.c = Math.cos(player.rotation);
-	
-	//for an explanation of this formula,
-	//see http://en.wikipedia.og/wiki/Rotation_matrix
-	var xVel = (this.velX * this.c) - (this.velY * this.s);
-	var yVel = (this.velX * this.s) + (this.velY * this.c);
-	
-	bullet.velocityX = xVel * BULLET_SPEED;
-	bullet.velocityY = yVel * BULLET_SPEED;
-	
-	//finally, add the bullet to the bullets array
-	bullets.push(bullet);
-}
-
 
 Bullet.prototype.update = function(deltaTime)
 {
-	//update the shoot timer
-	if(shootTimer > 0)
-			shootTimer -= deltaTime;
-	
-	//update all the bullets
-	for(var i=0; i<bullets.length; i++)
-	{
-		bullets[i].x += bullets[i].velocityX * deltaTime;
-		bullets[i].y += bullets[i].velocityY * deltaTime;
-	}
-	
-	if(shoot == false && shootTimer <= 0)
-	{
-	for(var i=0; i<bullets.length; i++)
-	{
-		//check if the bullet has gone out of screen boundaries
-		//and if so kill it
-		if(bullets[i].x < -bullets[i].width ||
-		bullets[i].x > SCREEN_WIDTH ||
-		bullets[i].y < -bullets[i].height ||
-		bullets[i].y > SCREEN_HEIGHT)
-		{
-			//remove 1 element at position i
-			bullets.splice(i, 1);
-			//because we are deleting elements from the middle of the
-			//array, we can only remove 1 at a time. So, as soon as we
-			//remove 1 bullet stop.
-			break;
-		}
-	}
-	}	
-}
-
-Bullet.prototype.shoot(deltaTime)
-{
-	if(keyboard.isKeyDown(keyboard.KEY_SHIFT) == true);
-	{
-		this.shoot ==  true;
-	}
-	else
-	{
-		this.shoot == false;
-	}
+	this.sprite.update(deltaTime);
+	this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
 }
 
 Bullet.prototype.draw = function()
 {
-	//draw all the bullets
-	for(var i=0; i<bullets.length; i++)
-	{
-		context.drawImage(bullets[i].image,
-		bullets[i].x - bullets[i].width/2,
-		bullets[i].y - bullets[i].height/2);
-	}
-}*/
+	var screenX = this.position.x - worldOffsetX;
+	this.sprite.draw(context, screenX, this.position.y);
+}

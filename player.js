@@ -14,6 +14,11 @@ var ANIM_MAX = 9;
 
 var PLAYER_SPEED = 300;
 
+//game states for space bar
+var STATE_CLIMB = 0
+var STATE_JUMP = 1
+var gameState = STATE_CLIMB;
+
 var Player = function()
 {
 	this.sprite = new Sprite("ChuckNorris.png");
@@ -52,7 +57,7 @@ var Player = function()
 	}
 
 	this.position = new Vector2();
-	this.position.set(1*35, 5*35);
+	this.position.set(1*35, 7*35);
 
 	this.width = 159;
 	this.height = 163;
@@ -65,7 +70,38 @@ var Player = function()
 	this.isDead = false;
 
 	this.direction = RIGHT;
+
+	this.cooldownTimer = 0;
 };
+
+Player.prototype.gameStateJump = function(deltaTime)
+{
+	if(this.falling == false && up == false)
+	{
+		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
+		{
+			jump = true;
+		}
+	}
+	
+}
+
+Player.prototype.gameStateClimb = function(deltaTime)
+{
+	if(this.falling == false && this.jumping == false && left == false && right == false)
+	{
+		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
+		{
+			up = true;
+			if(this.sprite.currentAnimation != ANIM_CLIMB)
+				this.sprite.setAnimation(ANIM_CLIMB);
+			{
+				this.velocity.y = 0;
+			}
+		}
+	}
+	
+}
 
 Player.prototype.update = function(deltaTime)
 {
@@ -86,7 +122,8 @@ Player.prototype.update = function(deltaTime)
 			this.sprite.setAnimation(ANIM_WALK_LEFT);
 		
 	}
-	if(keyboard.isKeyDown(keyboard.KEY_RIGHT) == true)
+	
+	else if(keyboard.isKeyDown(keyboard.KEY_RIGHT) == true)
 	{
 		this.x += PLAYER_SPEED * deltaTime;
 		right = true;
@@ -110,15 +147,43 @@ Player.prototype.update = function(deltaTime)
 			}
 		}
 	}
-	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true)
+	
+	if(this.cooldownTimer > 0)
 	{
-		jump = true;
+		this.cooldownTimer -= deltaTime;
 	}
-	if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
+
+	switch(gameState)
 	{
-		up = true;
-		if(this.sprite.currentAnimation != ANIM_CLIMB)
-			this.sprite.setAnimation(ANIM_CLIMB);
+		case STATE_JUMP:
+			player.gameStateJump(deltaTime);
+		break;
+		case STATE_CLIMB:
+			player.gameStateClimb(deltaTime);
+		break;
+	}
+
+	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true && this.cooldownTimer <= 0)
+	{
+		sfxFire.play();
+		this.cooldownTimer = 0.3;
+		for(var i=0; 0<bullets.length; i++)
+		{
+			if(this.direction == RIGHT)
+			{
+				if(this.sprite.currentAnimation != ANIM_SHOOT_RIGHT)
+					this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
+				right = true;
+				bullets.push(Bullet);
+			}
+			else
+			{
+				if(this.sprite.currentAnimation != ANIM_SHOOT_LEFT)
+					this.sprite.setAnimation(ANIM_SHOOT_LEFT);
+				left = true;
+				bullets.push(Bullet);
+			}
+		}
 	}
 
 	var wasleft = this.velocity.x < 0;
@@ -229,9 +294,3 @@ Player.prototype.draw = function()
 	//context.drawImage(this.image, this.position.x - worldOffsetX, this.position.y);
 	this.sprite.draw(context, this.position.x - worldOffsetX, this.position.y);
 }
-
-/*if(this.position > (this.width - canvas.width) || this.position > (this.height - canvas.height))
-{
-	this.isDead == true;
-	lives = 2;
-}*/

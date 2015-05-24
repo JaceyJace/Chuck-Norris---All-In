@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="15" tilewidth="35" tileheight="35" nextobjectid="1">
+ <tileset firstgid="1" name="Level1" tilewidth="70" tileheight="70" spacing="2" margin="2">
+  <image source="../Documents/PROGRAMMING/GitHub/Chuck-Norris---All-In/tileset.png" width="1024" height="1024"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjILhDeZB6dlQev5AOQQNTIDSE8mkJ9HOaaOAjmAuGr8PjaYFgOWJwZIXRgH5gB7pBRcYTUdDDwxkeqEFQC8/RzLAFRaUhBGx6WUimfKktnuIBaT6mdJ01ICD7iNTnlr2U2ouqfagpxcAJC4gyg==
+  </data>
+ </layer>
+ <layer name="Ladder" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt0tEJACAIRVH3H6cJWyAQ+yipcxbwITcC4A/j9oBEtq/7/tec+vfuHb30ohcq9EJF915gZQIFZgvT
+  </data>
+ </layer>
+ <layer name="WAter" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2DogikD7QAcgFR3DVZ/jALKwWI62rWUjnaNglEwCkYBLcBofTg8wXCP16Fa/+Jy93CPr8EOlpNIEwtmUUiTCgCjKQ7F
+  </data>
+ </layer>
+ <layer name="Door" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzrENAAAEADDn87UfDETSXtAIYKKuA7yS1wEAAFjS84gBEg==
+  </data>
+ </layer>
+ <layer name="Enemy" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1kEJAAAIA0D7d7KbKZwgdwXm2McqIKWvDwAACPn+96T7beV934kbA54WA7I=
+  </data>
+ </layer>
+</map>
