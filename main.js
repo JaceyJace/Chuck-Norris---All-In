@@ -79,7 +79,7 @@ var LAYER_LADDERS = 1; //CHECK
 var LAYER_WATER = 2;
 var LAYER_DOOR = 3;
 //#4 is var LAYER_OBJECT_ENEMIES = 4 listed below
-var LAYER_COUNT = 5;
+var LAYER_COUNT = 4;
 
 var MAP = {tw:70, th:15};
 var TILESET_TILE = TILE * 2;
@@ -230,7 +230,7 @@ function initialize()
 				idx++;
 			}
 		}
-		//add ladder
+		/*//add ladder
 		idx = 0;
 		for(var y = 0; y < level1.layers[LAYER_LADDERS].height; y++)
 		{
@@ -244,7 +244,7 @@ function initialize()
 				}
 				idx++;
 			}
-		}
+		}*/
 	}
 	musicBackground = new Howl(
 	{

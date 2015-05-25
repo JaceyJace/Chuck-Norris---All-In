@@ -1,5 +1,7 @@
 var Bullet = function(x, y, moveRight)
 {
+	/*var bullet = document.createElement("img");
+	bullet.src = "bullet.png";*/
 	this.sprite = new Sprite("bullet.png");
 	this.sprite.buildAnimation(1, 1, 32, 32, 8, -1, [0]);
 	this.sprite.setAnimationOffset(0, 0, 0);

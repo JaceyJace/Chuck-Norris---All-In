@@ -118,69 +118,30 @@ Player.prototype.update = function(deltaTime)
 			}
 		}
 	}
-	//RUNJUMPSTATE
-	//mostly stays the same, but we add some new logic
-	//at the end of the function
-	if(right == false && left == false && this.falling == false)
-	{
-		//player is not moving or falling, but could be
-		//jumping (because we use the up key for both
-		//jumping and climbing)
-		var cell = cellAtTileCoord(LAYER_LADDERS, tx, ty);
-		var cellright = cellAtTileCoord(LAYER_LADDERS, tx + 1, ty);
-		var celldown = cellAtTileCoord(LAYER_LADDERS, tx, ty + 1);
-		var celldiag = cellAtTileCoord(LAYER_LADDERS, tx + 1, ty + 1);
-		//check if we are standing at the bottom of a ladder
-		if(!cell || !cellright)
+	if(keyboard.isKeyDown(keyboard.KEY_UP)== true)
 		{
-			if(keyboard.isKeyDown(keyboard.KEY_UP)== true)
-			{
-				gameState = STATE_CLIMB;
-				this.sprite.setAnimation(ANIM_CLIMB);
-				return;
-			}
+			jump = true;
 		}
-		//check if we standing at the top of a ladder
-		if(!celldown || !celldiag)
-		{
-			if(keyboard.isKeyDown(keyboard.KEY_DOWN)== true)
-			{
-				gameState = STATE_RUNJUMP;
-				this.sprite.setAnimation(ANIM_CLIMB);
-				return;
-			}
-		}
-	}
 
-	switch(gameState)
-	{
-		case STATE_RUNJUMP:
-			player.gameStateRunJump(deltaTime, left);
-		break;
-		case STATE_CLIMB:
-			player.gameStateClimb(deltaTime, left);
-		break;
-	}
-
-	
 	if(this.cooldownTimer > 0)
 	{
 		this.cooldownTimer -= deltaTime;
 	}
+
 	//SHOOTING
 	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true && this.cooldownTimer <= 0)
 	{
 		sfxFire.play();
 		this.cooldownTimer = 0.3;
 
-		/*this.bullet = new Bullet();
-		bullet.velocity += BULLET_SPEED * deltaTime;
-		/*bullet.push(bullet);
-		var bulletTimer = 0.5
-		if(bulletTimer < 0)
+		this.bullet = new Bullet();
+		/*var BULLET_SPEED = 450;
+		Bullet.velocity += BULLET_SPEED * deltaTime;
+		bullets.push();
+		if(cooldownTimer < 0)
 		{
-			bulletTimer += deltaTime;
-		}
+			bulletTimer -= deltaTime;
+		}*/
 
 		for(var i=0; 0<bullets.length; i++)
 		{
@@ -198,10 +159,8 @@ Player.prototype.update = function(deltaTime)
 				left = true;
 				bullets.push(Bullet);
 			}
-		}*/
+		}
 	}
-
-
 
 	var wasleft = this.velocity.x < 0;
 	var wasright = this.velocity.x > 0;
@@ -304,17 +263,60 @@ Player.prototype.update = function(deltaTime)
 			}
 		}
 	}
+	/*//RUNJUMPSTATE
+	//mostly stays the same, but we add some new logic
+	//at the end of the function
+	if(right == false && left == false && this.falling == false)
+	{
+		//player is not moving or falling, but could be
+		//jumping (because we use the up key for both
+		//jumping and climbing)
+		var cell = cellAtTileCoord(LAYER_LADDERS, tx, ty);
+		var cellright = cellAtTileCoord(LAYER_LADDERS, tx + 1, ty);
+		var celldown = cellAtTileCoord(LAYER_LADDERS, tx, ty + 1);
+		var celldiag = cellAtTileCoord(LAYER_LADDERS, tx + 1, ty + 1);
+		//check if we are standing at the bottom of a ladder
+		if(!cell || !cellright)
+		{
+			if(keyboard.isKeyDown(keyboard.KEY_UP)== true)
+			{
+				gameState = STATE_CLIMB;
+				this.sprite.setAnimation(ANIM_CLIMB);
+				return;
+			}
+		}
+		//check if we standing at the top of a ladder
+		if(!celldown || !celldiag)
+		{
+			if(keyboard.isKeyDown(keyboard.KEY_DOWN)== true)
+			{
+				gameState = STATE_RUNJUMP;
+				this.sprite.setAnimation(ANIM_CLIMB);
+				return;
+			}
+		}
+	}
+
+	switch(gameState)
+	{
+		case STATE_RUNJUMP:
+			player.gameStateRunJump(deltaTime, left);
+		break;
+		case STATE_CLIMB:
+			player.gameStateClimb(deltaTime, left);
+		break;
+	}*/
 }	
 
 Player.prototype.gameStateRunJump = function(deltaTime, left)
 {
-	if(this.falling == false)
+	/*if(this.falling == false)
 	{
 		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
 		{
 			jump = true;
 		}
-	}
+	}*/
 }
 
 Player.prototype.gameStateClimb = function(deltaTime, left)
