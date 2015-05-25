@@ -73,7 +73,7 @@ var FRICTION = MAXDX * 6;
 //(a large) instanteous jump impulse
 var JUMP = METER * 1500;
 
-var LAYER_BACKGROUND = 0; //CHECK
+//var LAYER_BACKGROUND = 0; //CHECK
 var LAYER_PLATFORMS = 0; //CHECK
 var LAYER_LADDERS = 1; //CHECK
 var LAYER_WATER = 2;
@@ -112,7 +112,7 @@ function cellAtTileCoord(layer, tx, ty)
 {
 	if(tx<0 || tx>MAP.tw || ty<0)
 		return 1;
-	//let the player drop off the bottom of the screen 9this means dealth
+	//let the player drop off the bottom of the screen (this means death)
 	if(ty>=MAP.th)
 		return 0;
 	return cells[layer][ty][tx];
@@ -251,7 +251,7 @@ function initialize()
 		urls: ["background.ogg"],
 		loops: true,
 		buffer: true,
-		volume: 0.5
+		volume: 0
 	});
 	musicBackground.play();
 
@@ -274,6 +274,7 @@ function run()
 	
 	var deltaTime = getDeltaTime();
 	
+	//UPDATE
 	player.update(deltaTime);
 	for(var i=0; i<enemies.length; i++)
 	{
@@ -285,12 +286,15 @@ function run()
 	for(var i=0; i<bullets.length; i++)
 	{
 		bullets[i].update(deltaTime);
+		//check if the bullet went offscreen
+		//rememeber we are also scrolling the new world based on the player's
+		//position (so we need to find the bullet's screen coords)
 		if(bullets[i].position.x - worldOffsetX < 0 ||
 			bullets[i].position.x - worldOffsetX > SCREEN_WIDTH)
 		{
 			hit = true;
 		}
-
+		//also check if the bullet hit an enemy
 		for(var j=0; j<enemies.length; j++)
 		{
 			if(intersects(bullets[i].position.x, bullets[i].position.y, TILE, TILE,
@@ -316,6 +320,8 @@ function run()
 	context.font = "18px Arial";
 	var scoreText = "Score: " + score;
 	context.fillText(scoreText, 560, 20)
+
+	//DRAW
 	drawMap();
 	player.draw();
 	for(var i=0; i<enemies.length; i++)

@@ -38,7 +38,7 @@ Enemy.prototype.update = function(deltaTime)
 		{
 			if(celldiag && !cellright)
 			{
-				ddx = ddx + ENEMY_ACCEL;	//enemy wnats to go right
+				ddx = ddx + ENEMY_ACCEL;	//enemy wants to go right
 			}
 			else
 			{

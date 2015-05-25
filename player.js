@@ -16,7 +16,7 @@ var PLAYER_SPEED = 300;
 
 //game states for space bar
 var STATE_CLIMB = 0
-var STATE_JUMP = 1
+var STATE_RUNJUMP = 1
 var gameState = STATE_CLIMB;
 
 var Player = function()
@@ -74,35 +74,6 @@ var Player = function()
 	this.cooldownTimer = 0;
 };
 
-Player.prototype.gameStateJump = function(deltaTime)
-{
-	if(this.falling == false && up == false)
-	{
-		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
-		{
-			jump = true;
-		}
-	}
-	
-}
-
-Player.prototype.gameStateClimb = function(deltaTime)
-{
-	if(this.falling == false && this.jumping == false && left == false && right == false)
-	{
-		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
-		{
-			up = true;
-			if(this.sprite.currentAnimation != ANIM_CLIMB)
-				this.sprite.setAnimation(ANIM_CLIMB);
-			{
-				this.velocity.y = 0;
-			}
-		}
-	}
-	
-}
-
 Player.prototype.update = function(deltaTime)
 {
 	this.sprite.update(deltaTime);
@@ -111,8 +82,10 @@ Player.prototype.update = function(deltaTime)
 	var right = false;
 	var jump = false;
 	var up = false;
+	var down = false;
 
 	//check keypress events
+	//LEFT
 	if(keyboard.isKeyDown(keyboard.KEY_LEFT) == true)
 	{
 		this.x -= PLAYER_SPEED * deltaTime;
@@ -120,9 +93,8 @@ Player.prototype.update = function(deltaTime)
 		this.direction = LEFT;
 		if(this.sprite.currentAnimation != ANIM_WALK_LEFT)
 			this.sprite.setAnimation(ANIM_WALK_LEFT);
-		
 	}
-	
+	//RIGHT
 	else if(keyboard.isKeyDown(keyboard.KEY_RIGHT) == true)
 	{
 		this.x += PLAYER_SPEED * deltaTime;
@@ -130,7 +102,6 @@ Player.prototype.update = function(deltaTime)
 		this.direction = RIGHT;
 		if(this.sprite.currentAnimation != ANIM_WALK_RIGHT)
 			this.sprite.setAnimation(ANIM_WALK_RIGHT);
-		
 	}
 	else{
 		if(this.jumping == false && this.falling == false)
@@ -147,26 +118,70 @@ Player.prototype.update = function(deltaTime)
 			}
 		}
 	}
+	//RUNJUMPSTATE
+	//mostly stays the same, but we add some new logic
+	//at the end of the function
+	if(right == false && left == false && this.falling == false)
+	{
+		//player is not moving or falling, but could be
+		//jumping (because we use the up key for both
+		//jumping and climbing)
+		var cell = cellAtTileCoord(LAYER_LADDERS, tx, ty);
+		var cellright = cellAtTileCoord(LAYER_LADDERS, tx + 1, ty);
+		var celldown = cellAtTileCoord(LAYER_LADDERS, tx, ty + 1);
+		var celldiag = cellAtTileCoord(LAYER_LADDERS, tx + 1, ty + 1);
+		//check if we are standing at the bottom of a ladder
+		if(!cell || !cellright)
+		{
+			if(keyboard.isKeyDown(keyboard.KEY_UP)== true)
+			{
+				gameState = STATE_CLIMB;
+				this.sprite.setAnimation(ANIM_CLIMB);
+				return;
+			}
+		}
+		//check if we standing at the top of a ladder
+		if(!celldown || !celldiag)
+		{
+			if(keyboard.isKeyDown(keyboard.KEY_DOWN)== true)
+			{
+				gameState = STATE_RUNJUMP;
+				this.sprite.setAnimation(ANIM_CLIMB);
+				return;
+			}
+		}
+	}
+
+	switch(gameState)
+	{
+		case STATE_RUNJUMP:
+			player.gameStateRunJump(deltaTime, left);
+		break;
+		case STATE_CLIMB:
+			player.gameStateClimb(deltaTime, left);
+		break;
+	}
+
 	
 	if(this.cooldownTimer > 0)
 	{
 		this.cooldownTimer -= deltaTime;
 	}
-
-	switch(gameState)
-	{
-		case STATE_JUMP:
-			player.gameStateJump(deltaTime);
-		break;
-		case STATE_CLIMB:
-			player.gameStateClimb(deltaTime);
-		break;
-	}
-
+	//SHOOTING
 	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true && this.cooldownTimer <= 0)
 	{
 		sfxFire.play();
 		this.cooldownTimer = 0.3;
+
+		this.bullet = new Bullet();
+		bullet.velocity += BULLET_SPEED * deltaTime;
+		/*bullet.push(bullet);
+		var bulletTimer = 0.5
+		if(bulletTimer < 0)
+		{
+			bulletTimer += deltaTime;
+		}*/
+
 		for(var i=0; 0<bullets.length; i++)
 		{
 			if(this.direction == RIGHT)
@@ -185,6 +200,7 @@ Player.prototype.update = function(deltaTime)
 			}
 		}
 	}
+}
 
 	var wasleft = this.velocity.x < 0;
 	var wasright = this.velocity.x > 0;
@@ -287,6 +303,33 @@ Player.prototype.update = function(deltaTime)
 			}
 		}
 	}
+	
+
+Player.prototype.gameStateRunJump = function(deltaTime, left)
+{
+	if(this.falling == false)
+	{
+		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
+		{
+			jump = true;
+		}
+	}
+}
+
+Player.prototype.gameStateClimb = function(deltaTime, left)
+{
+	/*if(this.falling == false && this.jumping == false && left == false && right == false)
+	{
+		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
+		{
+			up = true;
+			if(this.sprite.currentAnimation != ANIM_CLIMB)
+				this.sprite.setAnimation(ANIM_CLIMB);
+			{
+				this.velocity.y = 0;
+			}
+		}
+	}*/
 }
 
 Player.prototype.draw = function()
