@@ -173,14 +173,14 @@ Player.prototype.update = function(deltaTime)
 		sfxFire.play();
 		this.cooldownTimer = 0.3;
 
-		this.bullet = new Bullet();
+		/*this.bullet = new Bullet();
 		bullet.velocity += BULLET_SPEED * deltaTime;
 		/*bullet.push(bullet);
 		var bulletTimer = 0.5
 		if(bulletTimer < 0)
 		{
 			bulletTimer += deltaTime;
-		}*/
+		}
 
 		for(var i=0; 0<bullets.length; i++)
 		{
@@ -198,9 +198,10 @@ Player.prototype.update = function(deltaTime)
 				left = true;
 				bullets.push(Bullet);
 			}
-		}
+		}*/
 	}
-}
+
+
 
 	var wasleft = this.velocity.x < 0;
 	var wasright = this.velocity.x > 0;
@@ -303,7 +304,7 @@ Player.prototype.update = function(deltaTime)
 			}
 		}
 	}
-	
+}	
 
 Player.prototype.gameStateRunJump = function(deltaTime, left)
 {
