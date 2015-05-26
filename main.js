@@ -324,15 +324,19 @@ function run()
 	//DRAW
 	drawMap();
 	player.draw();
+	//bullet.draw();
 	for(var i=0; i<enemies.length; i++)
 	{
 		enemies[i].draw(deltaTime);
 	}
 	
+
 	for(var i=0; i<bullets.length; i++)
 	{
 		bullets[i].draw(deltaTime);
 	}
+
+	//context.drawImage(Bullet, 5, 480)
 	
 	//set lives
 	for(var i=0; i<lives; i++)

@@ -14,6 +14,8 @@ var ANIM_MAX = 9;
 
 var PLAYER_SPEED = 300;
 
+//var moveRight = true;
+
 //game states for space bar
 var STATE_CLIMB = 0
 var STATE_RUNJUMP = 1
@@ -74,7 +76,7 @@ var Player = function()
 	this.cooldownTimer = 0;
 };
 
-Player.prototype.update = function(deltaTime)
+Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 {
 	this.sprite.update(deltaTime);
 
@@ -83,6 +85,7 @@ Player.prototype.update = function(deltaTime)
 	var jump = false;
 	var up = false;
 	var down = false;
+	var shoot = false;
 
 	//check keypress events
 	//LEFT
@@ -134,32 +137,63 @@ Player.prototype.update = function(deltaTime)
 		sfxFire.play();
 		this.cooldownTimer = 0.3;
 
-		this.bullet = new Bullet();
-		/*var BULLET_SPEED = 450;
-		Bullet.velocity += BULLET_SPEED * deltaTime;
-		bullets.push();
-		if(cooldownTimer < 0)
+		var	bullet = new Bullet;						//create a new bullet
+		if(this.direction == LEFT)						//set bullet velocity based on current direction
 		{
-			bulletTimer -= deltaTime;
-		}*/
+			Bullet.velocity = BULLET_SPEED * deltaTime;
+		}
+		for(var i=0; i<bullets.length; i++)				//add bullet to bullets array
+		{
+			bullets[i].push(Bullet);
+		}
+									
+		cooldownTimer = 0.5;							//set bullet timer to 0.5 seconds
 
-		for(var i=0; 0<bullets.length; i++)
+		/*var bullet = new Bullet();
+
+		var BULLET_SPEED = 450;
+		bullet.velocity.set *= BULLET_SPEED;
+		//bullet.velocity.set *= BULLET_SPEED;
+		// don't forget to set the bullet's position
+		bullet.position = this.position;
+		//bullet.y = player.y;
+		// make the bullet alive
+		bullet.isDead = false;
+
+		
+		//Bullet.position = this.position;
+		//Bullet.velocity *= BULLET_SPEED;
+
+
+		/*Bullet.moveRight = moveRight;
+	if(Bullet.moveRight == true)
+		Bullet.velocity.set(MAXDX * 2, 0);
+	else
+		Bullet.velocity.set(-MAXDX * 2, 0);*/
+
+	//Bullets.push(Bullet);
+
+		/*for(var i=0; 0<bullets.length; i++)
 		{
 			if(this.direction == RIGHT)
 			{
 				if(this.sprite.currentAnimation != ANIM_SHOOT_RIGHT)
 					this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
 				right = true;
-				bullets.push(Bullet);
+				shoot = true;
+				//bullets.push(Bullet);
 			}
 			else
 			{
 				if(this.sprite.currentAnimation != ANIM_SHOOT_LEFT)
 					this.sprite.setAnimation(ANIM_SHOOT_LEFT);
 				left = true;
-				bullets.push(Bullet);
+				shoot = true;
+				//bullets.push(Bullet);
 			}
 		}
+		//bullets.push(Bullet);
+		//return;*/
 	}
 
 	var wasleft = this.velocity.x < 0;
@@ -308,15 +342,15 @@ Player.prototype.update = function(deltaTime)
 	}*/
 }	
 
-Player.prototype.gameStateRunJump = function(deltaTime, left)
+/*Player.prototype.gameStateRunJump = function(deltaTime, left)
 {
-	/*if(this.falling == false)
+	if(this.falling == false)
 	{
 		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
 		{
 			jump = true;
 		}
-	}*/
+	}
 }
 
 Player.prototype.gameStateClimb = function(deltaTime, left)
@@ -332,8 +366,8 @@ Player.prototype.gameStateClimb = function(deltaTime, left)
 				this.velocity.y = 0;
 			}
 		}
-	}*/
-}
+	}
+}*/
 
 Player.prototype.draw = function()
 {
