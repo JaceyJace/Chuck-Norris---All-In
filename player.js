@@ -14,6 +14,8 @@ var ANIM_MAX = 9;
 
 var PLAYER_SPEED = 300;
 
+var bullets = [];
+
 //var moveRight = true;
 
 //game states for space bar
@@ -137,14 +139,14 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 		sfxFire.play();
 		this.cooldownTimer = 0.3;
 
-		var	bullet = new Bullet;						//create a new bullet
+		var	bullet = new Bullet(this.position.x, this.position.y, moveRight);						//create a new bullet
 		if(this.direction == LEFT)						//set bullet velocity based on current direction
 		{
-			Bullet.velocity = BULLET_SPEED * deltaTime;
+			bullet.velocity = BULLET_SPEED * deltaTime;
 		}
 		for(var i=0; i<bullets.length; i++)				//add bullet to bullets array
 		{
-			bullets[i].push(Bullet);
+			bullets[i].push(bullet);
 		}
 									
 		cooldownTimer = 0.5;							//set bullet timer to 0.5 seconds

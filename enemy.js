@@ -56,7 +56,7 @@ Enemy.prototype.update = function(deltaTime)
 		else
 		{
 			this.velocity.x = 0;
-			this.moveRight = false;
+			this.moveRight = true;
 			this.pause = 0.5;
 		}
 		}

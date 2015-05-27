@@ -1,11 +1,11 @@
 var Bullet = function(x, y, moveRight)
 {
-	/*var bullet = document.createElement("img");
-	bullet.src = "bullet.png";*/
-	this.sprite = new Sprite("bullet.png");
+	var bullet = document.createElement("img");
+	bullet.src = "bullet.png";
+	/*this.sprite = new Sprite("bullet.png");
 	this.sprite.buildAnimation(1, 1, 16, 5, -1, [0]);
 	this.sprite.setAnimationOffset(0, 0, 0);
-	this.sprite.setLoop(0, false);
+	this.sprite.setLoop(0, false);*/
 
 	this.position = new Vector2();
 	this.position.set(x, y);

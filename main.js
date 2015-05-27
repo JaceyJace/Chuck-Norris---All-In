@@ -96,7 +96,6 @@ var LAYER_OBJECT_ENEMIES = 4; // CHECK
 
 //var LAYER_OBJECT_TRIGGERS = 5; //CHECK
 //bullet stuff
-var bullets = [];
 
 function cellAtPixelCoord(layer, x, y)
 {
@@ -276,6 +275,7 @@ function run()
 	
 	//UPDATE
 	player.update(deltaTime);
+
 	for(var i=0; i<enemies.length; i++)
 	{
 		enemies[i].update(deltaTime);
