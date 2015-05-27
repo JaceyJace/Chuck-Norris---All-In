@@ -139,63 +139,35 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 		sfxFire.play();
 		this.cooldownTimer = 0.3;
 
-		var	bullet = new Bullet(this.position.x, this.position.y, moveRight);						//create a new bullet
-		if(this.direction == LEFT)						//set bullet velocity based on current direction
-		{
-			bullet.velocity = BULLET_SPEED * deltaTime;
-		}
-		for(var i=0; i<bullets.length; i++)				//add bullet to bullets array
-		{
-			bullets[i].push(bullet);
-		}
-									
-		cooldownTimer = 0.5;							//set bullet timer to 0.5 seconds
-
-		/*var bullet = new Bullet();
-
-		var BULLET_SPEED = 450;
-		bullet.velocity.set *= BULLET_SPEED;
-		//bullet.velocity.set *= BULLET_SPEED;
-		// don't forget to set the bullet's position
-		bullet.position = this.position;
-		//bullet.y = player.y;
-		// make the bullet alive
-		bullet.isDead = false;
-
-		
-		//Bullet.position = this.position;
-		//Bullet.velocity *= BULLET_SPEED;
-
-
-		/*Bullet.moveRight = moveRight;
-	if(Bullet.moveRight == true)
-		Bullet.velocity.set(MAXDX * 2, 0);
-	else
-		Bullet.velocity.set(-MAXDX * 2, 0);*/
-
-	//Bullets.push(Bullet);
-
-		/*for(var i=0; 0<bullets.length; i++)
-		{
-			if(this.direction == RIGHT)
+		if(this.direction == RIGHT)
 			{
 				if(this.sprite.currentAnimation != ANIM_SHOOT_RIGHT)
 					this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
-				right = true;
-				shoot = true;
+				//right = true;
+				//shoot = true;
 				//bullets.push(Bullet);
 			}
 			else
 			{
 				if(this.sprite.currentAnimation != ANIM_SHOOT_LEFT)
 					this.sprite.setAnimation(ANIM_SHOOT_LEFT);
-				left = true;
-				shoot = true;
+				//left = true;
+				//shoot = true;
 				//bullets.push(Bullet);
 			}
+
+		var	tempBullet = new Bullet(this.position.x, this.position.y, moveRight);						//create a new bullet
+		if(this.left == true)					//set bullet velocity based on current direction
+		{
+			this.velocity.set(MAXDX * 2, 0);
 		}
-		//bullets.push(Bullet);
-		//return;*/
+		else
+		{
+		this.velocity.set(-MAXDX * 2, 0);
+		}	
+									
+		cooldownTimer = 0.5;							//set bullet timer to 0.5 seconds
+		bullets.push(tempBullet);						//add bullet to bullets array
 	}
 
 	var wasleft = this.velocity.x < 0;
