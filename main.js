@@ -266,6 +266,18 @@ function initialize()
 	});
 }
 
+function intersects (x1, y1, w1, h1, x2, y2, w2, h2)
+{
+	if(y2 + h2 < y1 ||
+		x2 + w2 < x1 ||
+		x2 > x1 + w1 ||
+		y2 > y1 + h1)
+	{
+		return false;
+	}
+	return true;
+}
+
 function run()
 {
 	context.fillStyle = "#ccc";		
@@ -324,7 +336,7 @@ function run()
 	//DRAW
 	drawMap();
 	player.draw();
-	//bullet.draw();
+	
 	for(var i=0; i<enemies.length; i++)
 	{
 		enemies[i].draw(deltaTime);

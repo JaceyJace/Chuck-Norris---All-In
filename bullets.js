@@ -1,11 +1,11 @@
 var Bullet = function(x, y, moveRight)
 {
-	var bullet = document.createElement("img");
-	bullet.src = "bullet.png";
-	/*this.sprite = new Sprite("bullet.png");
+	/*var bullet = document.createElement("img");
+	bullet.src = "bullet.png";*/
+	this.sprite = new Sprite("bullet.png");
 	this.sprite.buildAnimation(1, 1, 16, 5, -1, [0]);
 	this.sprite.setAnimationOffset(0, 0, 0);
-	this.sprite.setLoop(0, false);*/
+	this.sprite.setLoop(0, false);
 
 	this.position = new Vector2();
 	this.position.set(x, y);
@@ -18,9 +18,9 @@ var Bullet = function(x, y, moveRight)
 
 	this.moveRight = moveRight;
 	if(this.moveRight == true)
-		this.velocity.set(MAXDX * 2, 0);
-	else
 		this.velocity.set(-MAXDX * 2, 0);
+	else
+		this.velocity.set(MAXDX * 2, 0);
 }
 
 Bullet.prototype.update = function(deltaTime)
@@ -32,5 +32,11 @@ Bullet.prototype.update = function(deltaTime)
 Bullet.prototype.draw = function()
 {
 	var screenX = this.position.x - worldOffsetX;
-	this.sprite.draw(context, screenX, this.position.y);
+	//this.sprite.draw(context, screenX, this.position.y);
+	context.save();
+			context.translate(player.x, player.y);
+			this.sprite.draw(context, screenX, this.position.y);
+			//context.drawImage(
+					//player.image, -player.width/2, -player.height/2);
+			context.restore();
 }

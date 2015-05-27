@@ -139,31 +139,32 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 		sfxFire.play();
 		this.cooldownTimer = 0.3;
 
-		if(this.direction == RIGHT)
+		var	tempBullet = new Bullet((this.position.x + 80), this.position.y);
+		if(this.direction == LEFT)
 			{
-				if(this.sprite.currentAnimation != ANIM_SHOOT_RIGHT)
-					this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
-				//right = true;
-				//shoot = true;
-				//bullets.push(Bullet);
+					//this.x -= PLAYER_SPEED * deltaTime;
+				//left = true;
+				//this.position.x -= bullet.velocity;
+				if(this.sprite.currentAnimation != ANIM_SHOOT_LEFT)
+					this.sprite.setAnimation(ANIM_SHOOT_LEFT);
 			}
 			else
 			{
-				if(this.sprite.currentAnimation != ANIM_SHOOT_LEFT)
-					this.sprite.setAnimation(ANIM_SHOOT_LEFT);
-				//left = true;
-				//shoot = true;
-				//bullets.push(Bullet);
+				//this.x -= PLAYER_SPEED * deltaTime;
+				//right = true;
+				//this.position.x += bullet.velocity;
+				if(this.sprite.currentAnimation != ANIM_SHOOT_RIGHT)
+					this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
 			}
 
-		var	tempBullet = new Bullet(this.position.x, this.position.y, moveRight);						//create a new bullet
-		if(this.left == true)					//set bullet velocity based on current direction
+														//create a new bullet
+		if(this.right == true)							//set bullet velocity based on current direction
 		{
-			this.velocity.set(MAXDX * 2, 0);
+			/*this.position.x += */this.velocity.set(MAXDX * 2, 0);
 		}
 		else
 		{
-		this.velocity.set(-MAXDX * 2, 0);
+			this.position.x -= */this.velocity.set(-MAXDX * 0, 0);
 		}	
 									
 		cooldownTimer = 0.5;							//set bullet timer to 0.5 seconds
