@@ -164,7 +164,7 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 		}
 		else
 		{
-			this.position.x -= */this.velocity.set(-MAXDX * 0, 0);
+			/*this.position.x -= */this.velocity.set(-MAXDX * 0, 0);
 		}	
 									
 		cooldownTimer = 0.5;							//set bullet timer to 0.5 seconds

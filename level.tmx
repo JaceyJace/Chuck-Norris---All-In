@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="70" height="15" tilewidth="35" tileheight="35" nextobjectid="1">
+ <tileset firstgid="1" name="newstage" tilewidth="70" tileheight="70" spacing="2" margin="2">
+  <image source="tileset.png" width="1024" height="1024"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AU0BtMGWgHDHMw1MKXHPcONT+OAuJB50A7YBTAwWDOZ4uhdAeVzBvMfh0Fo4AUgC0tU5K+qZE3KDHDEYc5jmjqRvPw4AdHCNDk6KU2IORGUuwHAF4wExs=
+  </data>
+ </layer>
+ <layer name="walkable" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF2IDtIKQHg5mjYBQMRTB3oB1AIRjq7h8sAFs4LoDSC9HETXGYYUGmPfjECYF6KN2Ag27Eo3cBlJ4NpdH9ORIAPfKPIxqNLu6CRofQ3EUjBwyG8nEClJ4IpSehyaPHP3o6YSAgTg3QgIMmFwyGcCcG0NqdQyUcSAV9OOjhCLDFIanx2kAkTYkZlNpNLE0KgOnBlV4AANMpKw==
+  </data>
+ </layer>
+ <layer name="Ladder" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20JT6AAAAAAPgYQaAAB
+  </data>
+ </layer>
+ <layer name="Enemy" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJzt1rkNACAIAED2n8jx3MBQaCBy10P4CiIAqLCKYsk7zdkOZuu2/271vDKlT/5y624zefwWdLEBWrYH6Q==
+  </data>
+ </layer>
+</map>

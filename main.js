@@ -43,6 +43,12 @@ var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
 
+var STATE_SPLASH = 0;
+var STATE_GAME = 1;
+var STATE_GAMEOVER = 2;
+
+var gameState = STATE_SPLASH;
+
 var position = new Vector2();
 var player = new Player();
 var enemy = new Enemy();
@@ -73,13 +79,11 @@ var FRICTION = MAXDX * 6;
 //(a large) instanteous jump impulse
 var JUMP = METER * 1500;
 
-//var LAYER_BACKGROUND = 0; //CHECK
-var LAYER_PLATFORMS = 0; //CHECK
-var LAYER_LADDERS = 1; //CHECK
-var LAYER_WATER = 2;
-var LAYER_DOOR = 3;
-//#4 is var LAYER_OBJECT_ENEMIES = 4 listed below
-var LAYER_COUNT = 4;
+var LAYER_BACKGROUND = 0; //CHECK
+var LAYER_PLATFORMS = 1; //CHECK
+var LAYER_LADDERS = 2; //CHECK
+//#3 is var LAYER_OBJECT_ENEMIES = 3 listed below
+var LAYER_COUNT = 3;
 
 var MAP = {tw:70, th:15};
 var TILESET_TILE = TILE * 2;
@@ -92,10 +96,10 @@ var TILESET_COUNT_Y = 14;
 var ENEMY_MAXDX = METER * 5;
 var ENEMY_ACCEL = ENEMY_MAXDX * 2;
 var enemies = [];
-var LAYER_OBJECT_ENEMIES = 4; // CHECK
+var LAYER_OBJECT_ENEMIES = 3; // CHECK
 
 //var LAYER_OBJECT_TRIGGERS = 5; //CHECK
-//bullet stuff
+
 
 function cellAtPixelCoord(layer, x, y)
 {
@@ -143,19 +147,46 @@ function drawMap()
 	var maxTiles = Math.floor(SCREEN_WIDTH / TILE) + 2;
 	var tileX = pixelToTile(player.position.x);
 	var offsetX = TILE + Math.floor(player.position.x % TILE);
+	/*var startY = -1;
+	var maxTilesHeight = Math.floor(SCREEN_HEIGHT / TILE) + 2;
+	var tileY = pixelToTile(player.position.y);
+	var offsetY = TILE + Math.floor(player.position.y % TILE);*/
 
 	startX = tileX - Math.floor(maxTiles / 2);
 
-	if(startX < -1)
+	if(startX < -1 /*&& startY <-1*/)
 	{
 		startX = 0;
 		offsetX = 0;
+		/*startY = 0;
+		offsetY = 0;*/
 	}
-	if(startX > MAP.tw - maxTiles)
+	if(startX > MAP.tw - maxTiles /*&& startY > MAP.th - maxTilesHeight*/)
 	{
 		startX = MAP.tw - maxTiles + 1;
 		offsetX = TILE;
+		/*startY = MAP.th - maxTilesHeight + 1;
+		offsetY = TILE;*/
 	}
+	/*var startY = -1;
+	var maxTiles = Math.floor(SCREEN_HEIGHT / TILE) + 2;
+	var tileY = pixelToTile(player.position.y);
+	var offsetY = TILE + Math.floor(player.position.y % TILE);
+
+	startY = tileY - Math.floor(maxTiles / 2);
+
+	if(startY < -1)
+	{
+		startY = 0;
+		offsetY = 0;
+	}
+	if(startY > MAP.th - maxTiles)
+	{
+		startY = MAP.th - maxTiles + 1;
+		offsetY = TILE;
+	}*/
+	
+	//worldOffsetY = startY * TILE + offsetY;
 	
 	worldOffsetX = startX * TILE + offsetX;
 
@@ -180,6 +211,49 @@ function drawMap()
 			}
 		}
 	}
+	/*var startY = -1;
+	var maxTiles = Math.floor(SCREEN_HEIGHT / TILE) + 2;
+	var tileY = pixelToTile(player.position.y);
+	var offsetY = TILE + Math.floor(player.position.y % TILE);
+
+	startY = tileY - Math.floor(maxTiles / 2);
+
+	if(startY < -1)
+	{
+		startY = 0;
+		offsetY = 0;
+	}
+	if(startY > MAP.th - maxTiles)
+	{
+		startY = MAP.th - maxTiles + 1;
+		offsetY = TILE;
+	}
+	
+	worldOffsetY = startY * TILE + offsetY;
+
+	/*for(var layerIdx=0; layerIdx<LAYER_COUNT; layerIdx++)
+	{
+		var idx = 0;
+		for(var x=0; x < level1.layers[layerIdx].width; x++)
+		{
+			var idx = x * level1.layers[layerIdx].height + startY;
+			for(var y = startY; y < startY + maxTiles; y++)
+			{
+				/*if(level1.layers[layerIdx].data[idx] !=0)
+				{
+					//the tiles in the Tiled map are base 1 (meaning a value of 0 means no tile),
+					//so subtract one from the tileset to get the correct tile
+					var tileIndex = level1.layers[layerIdx].data[idx]-1;
+					var sy = TILESET_PADDING + (tileIndex % TILESET_COUNT_Y)*(TILESET_TILE + TILESET_SPACING);
+					var sx = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_X))* (TILESET_TILE + TILESET_SPACING);
+					//var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X)*(TILESET_TILE + TILESET_SPACING);
+					//var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y))* (TILESET_TILE + TILESET_SPACING);
+					context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE, (x-startX)*TILE - offsetX, (y-1)*TILE, TILESET_TILE, TILESET_TILE);
+				}
+				idx++;
+			}
+		}
+	}*/
 }
 
 var musicBackground;
@@ -284,7 +358,48 @@ function run()
 	context.fillRect(0, 0, canvas.width, canvas.height);
 	
 	var deltaTime = getDeltaTime();
+
+	switch (gameState)
+	{
+		case STATE_SPLASH:
+				gameStateSplash(deltaTime);
+				break;
+		case STATE_GAME:
+				gameStateGame(deltaTime);
+				break;
+		case STATE_GAMEOVER:
+				gameStateGameOver(deltaTime);
+				break;
+	}
+		// update the frame counter 
+	fpsTime += deltaTime;
+	fpsCount++;
+	if(fpsTime >= 1)
+	{
+		fpsTime -= 1;
+		fps = fpsCount;
+		fpsCount = 0;
+	}		
 	
+	// draw the FPS
+	context.fillStyle = "#f00";
+	context.font="14px Arial";
+	context.fillText("FPS: " + fps, 5, 20, 100);
+}
+
+function gameStateSplash(deltaTime)
+{
+	var splashTimer = 3
+	splashTimer -= deltaTime
+	if(splashTimer <= 0)
+	{
+		gameState = STATE_GAME;
+		return;
+	}
+}
+
+function gameStateGame(deltaTime)
+{
 	//UPDATE
 	player.update(deltaTime);
 
@@ -355,21 +470,11 @@ function run()
 	{
 		context.drawImage(chuckHead, 5 + ((chuckHead.width+2)*i), 480)
 	}
+}
 
-	// update the frame counter 
-	fpsTime += deltaTime;
-	fpsCount++;
-	if(fpsTime >= 1)
-	{
-		fpsTime -= 1;
-		fps = fpsCount;
-		fpsCount = 0;
-	}		
-	
-	// draw the FPS
-	context.fillStyle = "#f00";
-	context.font="14px Arial";
-	context.fillText("FPS: " + fps, 5, 20, 100);
+function gameStateGameOver(deltaTime)
+{
+
 }
  
 initialize();
