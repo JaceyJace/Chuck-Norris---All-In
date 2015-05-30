@@ -43,11 +43,11 @@ var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
 
-var STATE_SPLASH = 0;
+/*var STATE_SPLASH = 0;
 var STATE_GAME = 1;
 var STATE_GAMEOVER = 2;
 
-var gameState = STATE_SPLASH;
+var gameState = STATE_SPLASH;*/
 
 var position = new Vector2();
 var player = new Player();
@@ -97,9 +97,22 @@ var ENEMY_MAXDX = METER * 5;
 var ENEMY_ACCEL = ENEMY_MAXDX * 2;
 var enemies = [];
 var LAYER_OBJECT_ENEMIES = 3; // CHECK
+var LAYER_OBJECT_TRIGGERS = 4; //CHECK
 
-//var LAYER_OBJECT_TRIGGERS = 5; //CHECK
-
+/*var splashTimer = 3
+function runSplash(deltaTime)
+{
+	splashTimer -= deltaTime
+	if(splashTimer <= 0)
+	{
+		gameState = STATE_GAME;
+		return;
+	}
+	
+	var chukystart = document.createElement("img");
+	chukystart.src = "chukystart.png";
+	context.drawImage = (chukystart, 0, 0);
+}*/
 
 function cellAtPixelCoord(layer, x, y)
 {
@@ -147,47 +160,22 @@ function drawMap()
 	var maxTiles = Math.floor(SCREEN_WIDTH / TILE) + 2;
 	var tileX = pixelToTile(player.position.x);
 	var offsetX = TILE + Math.floor(player.position.x % TILE);
-	/*var startY = -1;
-	var maxTilesHeight = Math.floor(SCREEN_HEIGHT / TILE) + 2;
-	var tileY = pixelToTile(player.position.y);
-	var offsetY = TILE + Math.floor(player.position.y % TILE);*/
+	
 
 	startX = tileX - Math.floor(maxTiles / 2);
 
-	if(startX < -1 /*&& startY <-1*/)
+	if(startX < -1)
 	{
 		startX = 0;
 		offsetX = 0;
-		/*startY = 0;
-		offsetY = 0;*/
+		
 	}
-	if(startX > MAP.tw - maxTiles /*&& startY > MAP.th - maxTilesHeight*/)
+	if(startX > MAP.tw - maxTiles)
 	{
 		startX = MAP.tw - maxTiles + 1;
 		offsetX = TILE;
-		/*startY = MAP.th - maxTilesHeight + 1;
-		offsetY = TILE;*/
 	}
-	/*var startY = -1;
-	var maxTiles = Math.floor(SCREEN_HEIGHT / TILE) + 2;
-	var tileY = pixelToTile(player.position.y);
-	var offsetY = TILE + Math.floor(player.position.y % TILE);
-
-	startY = tileY - Math.floor(maxTiles / 2);
-
-	if(startY < -1)
-	{
-		startY = 0;
-		offsetY = 0;
-	}
-	if(startY > MAP.th - maxTiles)
-	{
-		startY = MAP.th - maxTiles + 1;
-		offsetY = TILE;
-	}*/
-	
-	//worldOffsetY = startY * TILE + offsetY;
-	
+		
 	worldOffsetX = startX * TILE + offsetX;
 
 	for(var layerIdx=0; layerIdx<LAYER_COUNT; layerIdx++)
@@ -211,49 +199,6 @@ function drawMap()
 			}
 		}
 	}
-	/*var startY = -1;
-	var maxTiles = Math.floor(SCREEN_HEIGHT / TILE) + 2;
-	var tileY = pixelToTile(player.position.y);
-	var offsetY = TILE + Math.floor(player.position.y % TILE);
-
-	startY = tileY - Math.floor(maxTiles / 2);
-
-	if(startY < -1)
-	{
-		startY = 0;
-		offsetY = 0;
-	}
-	if(startY > MAP.th - maxTiles)
-	{
-		startY = MAP.th - maxTiles + 1;
-		offsetY = TILE;
-	}
-	
-	worldOffsetY = startY * TILE + offsetY;
-
-	/*for(var layerIdx=0; layerIdx<LAYER_COUNT; layerIdx++)
-	{
-		var idx = 0;
-		for(var x=0; x < level1.layers[layerIdx].width; x++)
-		{
-			var idx = x * level1.layers[layerIdx].height + startY;
-			for(var y = startY; y < startY + maxTiles; y++)
-			{
-				/*if(level1.layers[layerIdx].data[idx] !=0)
-				{
-					//the tiles in the Tiled map are base 1 (meaning a value of 0 means no tile),
-					//so subtract one from the tileset to get the correct tile
-					var tileIndex = level1.layers[layerIdx].data[idx]-1;
-					var sy = TILESET_PADDING + (tileIndex % TILESET_COUNT_Y)*(TILESET_TILE + TILESET_SPACING);
-					var sx = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_X))* (TILESET_TILE + TILESET_SPACING);
-					//var sx = TILESET_PADDING + (tileIndex % TILESET_COUNT_X)*(TILESET_TILE + TILESET_SPACING);
-					//var sy = TILESET_PADDING + (Math.floor(tileIndex / TILESET_COUNT_Y))* (TILESET_TILE + TILESET_SPACING);
-					context.drawImage(tileset, sx, sy, TILESET_TILE, TILESET_TILE, (x-startX)*TILE - offsetX, (y-1)*TILE, TILESET_TILE, TILESET_TILE);
-				}
-				idx++;
-			}
-		}
-	}*/
 }
 
 var musicBackground;
@@ -303,6 +248,29 @@ function initialize()
 				idx++;
 			}
 		}
+		//trigger layer in collision map - for the door to finish the game
+		cells[LAYER_OBJECT_TRIGGERS] = [];
+		idx = 0;
+		for(var y = 0; y < level1.layers[LAYER_OBJECT_TRIGGERS].height; y++)
+		{
+			cells[LAYER_OBJECT_TRIGGERS][y] = [];
+			for(var x = 0; x < level1.layers[LAYER_OBJECT_TRIGGERS].width; x++)
+			{
+				if(level1.layers[LAYER_OBJECT_TRIGGERS].data[idx] != 0)
+				{
+					cells[LAYER_OBJECT_TRIGGERS][y][x] = 1;
+					cells[LAYER_OBJECT_TRIGGERS][y-1][x] = 1;
+					cells[LAYER_OBJECT_TRIGGERS][y-1][x+1] = 1;
+					cells[LAYER_OBJECT_TRIGGERS][y][x+1] = 1;
+				}
+				else if(cells[LAYER_OBJECT_TRIGGERS][y][x] != 1)
+				{
+					//if we havent wet this cells value then set it to 0 now
+					cells[LAYER_OBJECT_TRIGGERS][y][x] = 0;
+				}
+				idx++;
+			}
+		}
 		/*//add ladder
 		idx = 0;
 		for(var y = 0; y < level1.layers[LAYER_LADDERS].height; y++)
@@ -318,13 +286,14 @@ function initialize()
 				idx++;
 			}
 		}*/
+
 	}
 	musicBackground = new Howl(
 	{
 		urls: ["background.ogg"],
 		loops: true,
 		buffer: true,
-		volume: 0
+		volume: 0.5,
 	});
 	musicBackground.play();
 
@@ -352,6 +321,26 @@ function intersects (x1, y1, w1, h1, x2, y2, w2, h2)
 	return true;
 }
 
+/*function runGame(deltaTime)
+{
+	
+}*/
+
+/*function runGameOver(deltaTime)
+{
+	var endTimer = 3
+	endTimer -= deltaTime
+	if(endTimer <= 0)
+	{
+		gameState = STATE_GAME;
+		return;
+	}
+	
+	var chukystart = document.createElement("img");
+	chukystart.src = "chukystart.png";
+	context.drawImage = (chukystart, 0, 0);
+}*/
+
 function run()
 {
 	context.fillStyle = "#ccc";		
@@ -359,47 +348,19 @@ function run()
 	
 	var deltaTime = getDeltaTime();
 
-	switch (gameState)
+	/*switch (gameState)
 	{
 		case STATE_SPLASH:
-				gameStateSplash(deltaTime);
+				runSplash(deltaTime);
 				break;
 		case STATE_GAME:
-				gameStateGame(deltaTime);
+				runGame(deltaTime);
 				break;
 		case STATE_GAMEOVER:
-				gameStateGameOver(deltaTime);
+				runGameOver(deltaTime);
 				break;
-	}
-		// update the frame counter 
-	fpsTime += deltaTime;
-	fpsCount++;
-	if(fpsTime >= 1)
-	{
-		fpsTime -= 1;
-		fps = fpsCount;
-		fpsCount = 0;
-	}		
+	}*/
 	
-	// draw the FPS
-	context.fillStyle = "#f00";
-	context.font="14px Arial";
-	context.fillText("FPS: " + fps, 5, 20, 100);
-}
-
-function gameStateSplash(deltaTime)
-{
-	var splashTimer = 3
-	splashTimer -= deltaTime
-	if(splashTimer <= 0)
-	{
-		gameState = STATE_GAME;
-		return;
-	}
-}
-
-function gameStateGame(deltaTime)
-{
 	//UPDATE
 	player.update(deltaTime);
 
@@ -424,8 +385,8 @@ function gameStateGame(deltaTime)
 		//also check if the bullet hit an enemy
 		for(var j=0; j<enemies.length; j++)
 		{
-			if(intersects(bullets[i].position.x, bullets[i].position.y, TILE, TILE,
-				enemies[j].position.x, enemies[j].position.y, TILE, TILE)== true)
+			if(intersects(enemies[j].position.x, enemies[j].position.y, TILE, TILE,
+				bullets[i].position.x, bullets[i].position.y, TILE, TILE)== true)
 			{
 				//kill both bullet and enemy
 				enemies.splice(j, 1);
@@ -440,13 +401,21 @@ function gameStateGame(deltaTime)
 			bullets.splice(i, 1);
 			break;
 		}
+		for(var j=0; j<enemies.length; j++)
+		{
+			
+			if(player.isDead = false)
+			{
+				if(intersects(enemies[j].position.x, enemies[j].position.y, TILE, TILE,
+					player.position.x, player.position.y, player.width, player.height)== true)
+				{
+				player.isDead = true;
+				enemies.splice(j, 1);
+				break;
+				}
+			}
+		}
 	}
-
-	//set the score
-	context.fillStyle = "#f30426"
-	context.font = "18px Arial";
-	var scoreText = "Score: " + score;
-	context.fillText(scoreText, 560, 20)
 
 	//DRAW
 	drawMap();
@@ -457,26 +426,39 @@ function gameStateGame(deltaTime)
 		enemies[i].draw(deltaTime);
 	}
 	
-
 	for(var i=0; i<bullets.length; i++)
 	{
 		bullets[i].draw(deltaTime);
 	}
 
-	//context.drawImage(Bullet, 5, 480)
-	
 	//set lives
 	for(var i=0; i<lives; i++)
 	{
 		context.drawImage(chuckHead, 5 + ((chuckHead.width+2)*i), 480)
 	}
+
+	// update the frame counter 
+	fpsTime += deltaTime;
+	fpsCount++;
+	if(fpsTime >= 1)
+	{
+		fpsTime -= 1;
+		fps = fpsCount;
+		fpsCount = 0;
+	}		
+	
+	// draw the FPS
+	context.fillStyle = "#f00";
+	context.font="14px Arial";
+	context.fillText("FPS: " + fps, 5, 20, 100);
+
+	//set the score
+	context.fillStyle = "#f30426"
+	context.font = "18px Arial";
+	var scoreText = "Score: " + score;
+	context.fillText(scoreText, 560, 20)
 }
 
-function gameStateGameOver(deltaTime)
-{
-
-}
- 
 initialize();
 
 //-------------------- Don't modify anything below here
