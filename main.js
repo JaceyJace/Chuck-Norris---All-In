@@ -43,11 +43,12 @@ var fps = 0;
 var fpsCount = 0;
 var fpsTime = 0;
 
-/*var STATE_SPLASH = 0;
+var STATE_SPLASH = 0;
 var STATE_GAME = 1;
 var STATE_GAMEOVER = 2;
+var STATE_GAMEWIN = 3;
 
-var gameState = STATE_SPLASH;*/
+var gameState = STATE_SPLASH;
 
 var position = new Vector2();
 var player = new Player();
@@ -99,20 +100,20 @@ var enemies = [];
 var LAYER_OBJECT_ENEMIES = 3; // CHECK
 var LAYER_OBJECT_TRIGGERS = 4; //CHECK
 
-/*var splashTimer = 3
+var splashTimer = 3
 function runSplash(deltaTime)
 {
+	var chukystart = document.createElement("img");
+	chukystart.src = "chukystart.png";
+	context.drawImage(chukystart, 0, 0);
+
 	splashTimer -= deltaTime
 	if(splashTimer <= 0)
 	{
 		gameState = STATE_GAME;
 		return;
 	}
-	
-	var chukystart = document.createElement("img");
-	chukystart.src = "chukystart.png";
-	context.drawImage = (chukystart, 0, 0);
-}*/
+}
 
 function cellAtPixelCoord(layer, x, y)
 {
@@ -321,46 +322,8 @@ function intersects (x1, y1, w1, h1, x2, y2, w2, h2)
 	return true;
 }
 
-/*function runGame(deltaTime)
+function runGame(deltaTime)
 {
-	
-}*/
-
-/*function runGameOver(deltaTime)
-{
-	var endTimer = 3
-	endTimer -= deltaTime
-	if(endTimer <= 0)
-	{
-		gameState = STATE_GAME;
-		return;
-	}
-	
-	var chukystart = document.createElement("img");
-	chukystart.src = "chukystart.png";
-	context.drawImage = (chukystart, 0, 0);
-}*/
-
-function run()
-{
-	context.fillStyle = "#ccc";		
-	context.fillRect(0, 0, canvas.width, canvas.height);
-	
-	var deltaTime = getDeltaTime();
-
-	/*switch (gameState)
-	{
-		case STATE_SPLASH:
-				runSplash(deltaTime);
-				break;
-		case STATE_GAME:
-				runGame(deltaTime);
-				break;
-		case STATE_GAMEOVER:
-				runGameOver(deltaTime);
-				break;
-	}*/
-	
 	//UPDATE
 	player.update(deltaTime);
 
@@ -432,11 +395,88 @@ function run()
 	}
 
 	//set lives
+	var respawnTimer = 1;
 	for(var i=0; i<lives; i++)
 	{
 		context.drawImage(chuckHead, 5 + ((chuckHead.width+2)*i), 480)
 	}
+	if(player.isDead == false)
+		{
+			if(player.position.y > SCREEN_HEIGHT)
+			{
+					player.isDead == true;
+					lives -= 1;
+					player.position.set(1*35, 7*35);
+					/*if(lives = 0)
+					{
+						gameState = STATE_GAMEOVER;
+						return;
+					}*/
+			}
+			if(lives == 0)
+			{
+				gameState = STATE_GAMEOVER;
+				return;
+			}		
+			/*respawnTimer -=deltaTime;
+			if(respawnTimer <= 0)
+			{}*/
+		}
+}
 
+var endTimer = 3
+function runGameOver(deltaTime)
+{
+	endTimer -= deltaTime
+	/*if(endTimer <= 0)
+	{
+		
+	}*/
+	
+	var chukystart = document.createElement("img");
+	chukystart.src = "chukystartOver.png";
+	context.drawImage(chukystart, 0, 0);
+}
+
+function runGameWin(deltaTime)
+{
+	endTimer -= deltaTime
+		
+	var chukystart = document.createElement("img");
+	chukystart.src = "chukystart.png";
+	context.drawImage(chukystart, 0, 0);
+
+	if(endTimer <= 0)
+	{
+		player.position.set(1*35, 7*35);
+		player.update(deltaTime);
+		gameState = STATE_SPLASH;
+		return;
+	}
+}
+
+function run()
+{
+	context.fillStyle = "#ccc";		
+	context.fillRect(0, 0, canvas.width, canvas.height);
+	
+	var deltaTime = getDeltaTime();
+
+	switch (gameState)
+	{
+		case STATE_SPLASH:
+				runSplash(deltaTime);
+				break;
+		case STATE_GAME:
+				runGame(deltaTime);
+				break;
+		case STATE_GAMEOVER:
+				runGameOver(deltaTime);
+				break;
+		case STATE_GAMEWIN:
+				runGameWin(deltaTime);
+				break;
+	}
 	// update the frame counter 
 	fpsTime += deltaTime;
 	fpsCount++;
@@ -457,6 +497,7 @@ function run()
 	context.font = "18px Arial";
 	var scoreText = "Score: " + score;
 	context.fillText(scoreText, 560, 20)
+
 }
 
 initialize();

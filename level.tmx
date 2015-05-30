@@ -10,7 +10,7 @@
  </layer>
  <layer name="walkable" width="70" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF2IDtIKQHg5mjYBQMRTB3oB1AIRjq7h8sAFs4LoDSC9HETXGYYUGmPfjECYF6KN2Ag27Eo3cBlJ4NpdH9ORIAPfKPIxqNLu6CRofQ3EUjBwyG8nEClJ4IpSehyaPHP3o6YSAgTg3QgIMmFwyGcCcG0NqdQyUcSAV9OOjhCLDFIanx2kAkTYkZlNpNLE0KgOnBlV4AANMpKw==
+   eJztlM0KgCAMgH2poEuHoEfofbIXiOoagb1pl3UZzn9pit/lg4lzbqIQDR0DQ3PI2WiUyP13AZGUXj8XdH1U4AfFOyJHH3iOKW5jAUvCq2GvAl9gfM9GGkZkHJ+Q5+wV2anlX+Fwjx18gE+0jueP34mwxFMgCYfCoe8u5K6zlD74shGuEd0MfecqHR2TI/ZsV/vw7aHeywtVDCkr
   </data>
  </layer>
  <layer name="Ladder" width="70" height="15">
@@ -21,6 +21,11 @@
  <layer name="Enemy" width="70" height="15">
   <data encoding="base64" compression="zlib">
    eJzt1rkNACAIAED2n8jx3MBQaCBy10P4CiIAqLCKYsk7zdkOZuu2/271vDKlT/5y624zefwWdLEBWrYH6Q==
+  </data>
+ </layer>
+ <layer name="Trigger" width="70" height="15">
+  <data encoding="base64" compression="zlib">
+   eJztzjENAAAIA7D5t4Q5DOwnJK2CJgAAfDTXAQAoFueEALw=
   </data>
  </layer>
 </map>

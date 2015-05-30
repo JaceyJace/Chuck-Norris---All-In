@@ -142,7 +142,7 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 		var	tempBullet = new Bullet((this.position.x + 80), this.position.y);
 		if(this.direction == LEFT)
 			{
-					//this.x -= PLAYER_SPEED * deltaTime;
+				//this.x -= PLAYER_SPEED * deltaTime;
 				//left = true;
 				//this.position.x -= bullet.velocity;
 				if(this.sprite.currentAnimation != ANIM_SHOOT_LEFT)
@@ -272,6 +272,23 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 			}
 		}
 	}
+	//stop player leaving screen left & right
+	//player go right - this doesnt work
+	if((this.position.x - worldOffsetX) > (SCREEN_WIDTH - this.position.width) + 45) /*+45 b.cause ship wasn't hitting edge of screen - stopped early*/
+	{
+		this.position.x = (SCREEN_WIDTH - this.width) /*+ 45*/;
+	}
+	//player to go left - only this one works
+	if(this.position.x < 40)
+	{
+		this.position.x = 40;
+	}
+
+	if(cellAtTileCoord(LAYER_OBJECT_TRIGGERS, tx, ty)== true)
+	{
+		gameState = STATE_GAMEWIN;
+	}
+
 	/*//RUNJUMPSTATE
 	//mostly stays the same, but we add some new logic
 	//at the end of the function

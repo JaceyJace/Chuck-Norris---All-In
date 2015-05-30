@@ -53,12 +53,12 @@ Enemy.prototype.update = function(deltaTime)
 			{
 				ddx = ddx - ENEMY_ACCEL;	//enemy wants to go left
 			}
-		else
-		{
-			this.velocity.x = 0;
-			this.moveRight = true;
-			this.pause = 0.5;
-		}
+			else
+			{
+				this.velocity.x = 0;
+				this.moveRight = true;
+				this.pause = 0.5;
+			}
 		}
 		this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
 		this.velocity.x = bound(this.velocity.x + (deltaTime * ddx),

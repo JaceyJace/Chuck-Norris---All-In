@@ -12,8 +12,6 @@ var Bullet = function(x, y, moveRight)
 
 	this.velocity = new Vector2();
 
-	//this.isDead = false;
-
 	//var BULLET_SPEED = 450;
 
 	this.moveRight = moveRight;
