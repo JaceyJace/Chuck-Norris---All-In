@@ -292,9 +292,9 @@ function initialize()
 	musicBackground = new Howl(
 	{
 		urls: ["background.ogg"],
-		loops: true,
+		loop: true,
 		buffer: true,
-		volume: 0.5,
+		volume: 1,
 	});
 	musicBackground.play();
 

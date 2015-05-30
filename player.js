@@ -139,33 +139,30 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 		sfxFire.play();
 		this.cooldownTimer = 0.3;
 
-		var	tempBullet = new Bullet((this.position.x + 80), this.position.y);
+		var	tempBullet = new Bullet((this.position.x /*+ 80*/), this.position.y);
 		if(this.direction == LEFT)
-			{
-				//this.x -= PLAYER_SPEED * deltaTime;
-				//left = true;
-				//this.position.x -= bullet.velocity;
-				if(this.sprite.currentAnimation != ANIM_SHOOT_LEFT)
-					this.sprite.setAnimation(ANIM_SHOOT_LEFT);
-			}
-			else
-			{
-				//this.x -= PLAYER_SPEED * deltaTime;
-				//right = true;
-				//this.position.x += bullet.velocity;
-				if(this.sprite.currentAnimation != ANIM_SHOOT_RIGHT)
-					this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
-			}
-
-														//create a new bullet
-		if(this.right == true)							//set bullet velocity based on current direction
 		{
-			/*this.position.x += */this.velocity.set(MAXDX * 2, 0);
+			if(this.sprite.currentAnimation != ANIM_SHOOT_LEFT)
+				this.sprite.setAnimation(ANIM_SHOOT_LEFT);
 		}
 		else
 		{
-			/*this.position.x -= */this.velocity.set(-MAXDX * 0, 0);
-		}	
+			if(this.sprite.currentAnimation != ANIM_SHOOT_RIGHT)
+				this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
+		}
+
+//they will need the players position as reference and their own so you can offset it so they will appear to be following
+//Aaron Roff: set bullet to where it needs to, if player is left to it have it -= velocity, if he is right of it += velocity
+//or velocity += player position
+
+		if(right == true)
+		{
+			this.position.x += tempBullet.velocity.set(-MAXDX * 2, 0);
+		}
+		else
+		{
+			this.position.x -= tempBullet.velocity.set(MAXDX * 2, 0);
+		}
 									
 		cooldownTimer = 0.5;							//set bullet timer to 0.5 seconds
 		bullets.push(tempBullet);						//add bullet to bullets array
@@ -363,6 +360,5 @@ Player.prototype.gameStateClimb = function(deltaTime, left)
 
 Player.prototype.draw = function()
 {
-	//context.drawImage(this.image, this.position.x - worldOffsetX, this.position.y);
 	this.sprite.draw(context, this.position.x - worldOffsetX, this.position.y);
 }
