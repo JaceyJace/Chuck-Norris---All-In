@@ -61,7 +61,7 @@ var Player = function()
 	}
 
 	this.position = new Vector2();
-	this.position.set(1*35, 7*35);
+	this.position.set(1*35, 12*35);
 
 	this.width = 159;
 	this.height = 163;
@@ -139,14 +139,16 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 		sfxFire.play();
 		this.cooldownTimer = 0.3;
 
-		var	tempBullet = new Bullet((this.position.x /*+ 80*/), this.position.y);
+		var	tempBullet = new Bullet((this.position.x), this.position.y);
 		if(this.direction == LEFT)
 		{
+			left = true;
 			if(this.sprite.currentAnimation != ANIM_SHOOT_LEFT)
 				this.sprite.setAnimation(ANIM_SHOOT_LEFT);
 		}
 		else
 		{
+			right = true;
 			if(this.sprite.currentAnimation != ANIM_SHOOT_RIGHT)
 				this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
 		}
@@ -157,15 +159,17 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 
 		if(right == true)
 		{
-			this.position.x += tempBullet.velocity.set(-MAXDX * 2, 0);
+			tempBullet.velocity.x = 400; //set direction for bullet
+			tempBullet.position.x += 80; //set position of bullet to make it come out of gun not belly
 		}
 		else
 		{
-			this.position.x -= tempBullet.velocity.set(MAXDX * 2, 0);
+			tempBullet.velocity.x = -400; //set direction for bullet
+			tempBullet.position.x -= 50; //set position of bullet to make it come out of gun not bell
 		}
 									
-		cooldownTimer = 0.5;							//set bullet timer to 0.5 seconds
-		bullets.push(tempBullet);						//add bullet to bullets array
+		cooldownTimer = 0.5;			//set bullet timer to 0.5 seconds
+		bullets.push(tempBullet);		//add bullet to bullets array
 	}
 
 	var wasleft = this.velocity.x < 0;

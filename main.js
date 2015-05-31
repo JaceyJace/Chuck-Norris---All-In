@@ -62,6 +62,9 @@ var lives = 3;
 var chuckHead = document.createElement("img");
 	chuckHead.src = "chuckHead.png";
 
+var health = document.createElement("img");
+	health.src = "health.png";
+
 
 //set tile
 var TILE = 35;
@@ -80,9 +83,9 @@ var FRICTION = MAXDX * 6;
 //(a large) instanteous jump impulse
 var JUMP = METER * 1500;
 
-var LAYER_BACKGROUND = 0; //CHECK
-var LAYER_PLATFORMS = 1; //CHECK
-var LAYER_LADDERS = 2; //CHECK
+var LAYER_BACKGROUND = 0; 
+var LAYER_PLATFORMS = 1; 
+var LAYER_LADDERS = 2; 
 //#3 is var LAYER_OBJECT_ENEMIES = 3 listed below
 var LAYER_COUNT = 3;
 
@@ -97,8 +100,9 @@ var TILESET_COUNT_Y = 14;
 var ENEMY_MAXDX = METER * 5;
 var ENEMY_ACCEL = ENEMY_MAXDX * 2;
 var enemies = [];
-var LAYER_OBJECT_ENEMIES = 3; // CHECK
-var LAYER_OBJECT_TRIGGERS = 4; //CHECK
+var LAYER_OBJECT_ENEMIES = 3; 
+var LAYER_OBJECT_TRIGGERS = 4; 
+var LAYER_OBJECT_TRIGGERSHEALTH = 5;
 
 var splashTimer = 3
 function runSplash(deltaTime)
@@ -272,6 +276,7 @@ function initialize()
 				idx++;
 			}
 		}
+
 		/*//add ladder
 		idx = 0;
 		for(var y = 0; y < level1.layers[LAYER_LADDERS].height; y++)
@@ -353,6 +358,7 @@ function runGame(deltaTime)
 			{
 				//kill both bullet and enemy
 				enemies.splice(j, 1);
+				enemies.life -=1;
 				hit = true;
 				//increment score
 				score += 1;
@@ -364,21 +370,21 @@ function runGame(deltaTime)
 			bullets.splice(i, 1);
 			break;
 		}
-		for(var j=0; j<enemies.length; j++)
+	}
+	for(var j=0; j<enemies.length; j++)
 		{
-			
-			if(player.isDead = false)
+			if(player.isDead == false)
 			{
 				if(intersects(enemies[j].position.x, enemies[j].position.y, TILE, TILE,
-					player.position.x, player.position.y, player.width, player.height)== true)
+					player.position.x, player.position.y, player.width/2, player.height/2)== true)
 				{
-				player.isDead = true;
-				enemies.splice(j, 1);
+				//player.isDead == true;
+				lives -= 1;
+				player.position.set(1*35, 12*35);
 				break;
 				}
 			}
 		}
-	}
 
 	//DRAW
 	drawMap();
@@ -389,6 +395,7 @@ function runGame(deltaTime)
 		enemies[i].draw(deltaTime);
 	}
 	
+	
 	for(var i=0; i<bullets.length; i++)
 	{
 		bullets[i].draw(deltaTime);
@@ -398,47 +405,48 @@ function runGame(deltaTime)
 	var respawnTimer = 1;
 	for(var i=0; i<lives; i++)
 	{
-		context.drawImage(chuckHead, 5 + ((chuckHead.width+2)*i), 480)
+		context.drawImage(chuckHead, 5 + ((chuckHead.width+2)*i), 480);
 	}
 	if(player.isDead == false)
+	{
+		if(player.position.y > SCREEN_HEIGHT)
 		{
-			if(player.position.y > SCREEN_HEIGHT)
-			{
-					player.isDead == true;
-					lives -= 1;
-					player.position.set(1*35, 7*35);
-					/*if(lives = 0)
-					{
-						gameState = STATE_GAMEOVER;
-						return;
-					}*/
-			}
-			if(lives == 0)
-			{
-				gameState = STATE_GAMEOVER;
-				return;
-			}		
-			/*respawnTimer -=deltaTime;
-			if(respawnTimer <= 0)
-			{}*/
+				player.isDead == true;
+				lives -= 1;
+				player.position.set(1*35, 12*35);
 		}
+		if(lives == 0)
+		{
+			gameState = STATE_GAMEOVER;
+			return;
+		}		
+		/*respawnTimer -=deltaTime;
+		if(respawnTimer <= 0)
+		{}*/
+	}
 }
 
-var endTimer = 3
-function runGameOver(deltaTime)
+var endTimer = 5
+function runGameOver(deltaTime, x, y)
 {
-	endTimer -= deltaTime
-	/*if(endTimer <= 0)
-	{
-		
-	}*/
-	
 	var chukystart = document.createElement("img");
 	chukystart.src = "chukystartOver.png";
 	context.drawImage(chukystart, 0, 0);
+
+	endTimer -= deltaTime
+	if(endTimer <= 0)
+	{
+		player.position.set(1*35, 12*35);
+		score = 0;
+		lives = 3;
+		gameState = STATE_GAME;
+		return;
+	}
+	
+
 }
 
-function runGameWin(deltaTime)
+function runGameWin(deltaTime, x, y)
 {
 	endTimer -= deltaTime
 		
@@ -448,8 +456,9 @@ function runGameWin(deltaTime)
 
 	if(endTimer <= 0)
 	{
-		player.position.set(1*35, 7*35);
-		player.update(deltaTime);
+		player.position.set(1*35, 12*35);
+		score = 0;
+		lives = 3;
 		gameState = STATE_SPLASH;
 		return;
 	}

@@ -5,12 +5,12 @@
  </tileset>
  <layer name="Tile Layer 1" width="70" height="15">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AU0BtMGWgHDHMw1MKXHPcONT+OAuJB50A7YBTAwWDOZ4uhdAeVzBvMfh0Fo4AUgC0tU5K+qZE3KDHDEYc5jmjqRvPw4AdHCNDk6KU2IORGUuwHAF4wExs=
+   eJxjYBgFo2BoA1MobTGgrhgFgx3A0okZlDaH0oMh3Uyhk55RQBigpxNHNJoe6aaThmaPAtIArnxGKJ3QI90shtIdVDJvtEyhP0BPJ6OAOgBbWqYkfVMjbyylQC+h8gVm9mgeHvzgCAGaHL3oYBYBmly3keN2ADa/G4o=
   </data>
  </layer>
  <layer name="walkable" width="70" height="15">
   <data encoding="base64" compression="zlib">
-   eJztlM0KgCAMgH2poEuHoEfofbIXiOoagb1pl3UZzn9pit/lg4lzbqIQDR0DQ3PI2WiUyP13AZGUXj8XdH1U4AfFOyJHH3iOKW5jAUvCq2GvAl9gfM9GGkZkHJ+Q5+wV2anlX+Fwjx18gE+0jueP34mwxFMgCYfCoe8u5K6zlD74shGuEd0MfecqHR2TI/ZsV/vw7aHeywtVDCkr
+   eJztlDEOgCAMRbkTs5v3Ei9g0NWY6E1dOjUUsBAs2re8QagNv6kxSohBoCXUVBQlzfF2AwxG5BpIewdp/eQygR3hOXL3BO/gq7AXaj44c9Mqj15z/zs95ebBK3hD3/F+tUQdi87V3MeOMJee8gnh00eyaP0ONWcixkL4i4QyfJqry3RJjdx7eH9gc/8Tg5qXG+l+JYQ=
   </data>
  </layer>
  <layer name="Ladder" width="70" height="15">
@@ -20,12 +20,17 @@
  </layer>
  <layer name="Enemy" width="70" height="15">
   <data encoding="base64" compression="zlib">
-   eJzt1rkNACAIAED2n8jx3MBQaCBy10P4CiIAqLCKYsk7zdkOZuu2/271vDKlT/5y624zefwWdLEBWrYH6Q==
+   eJzt1IEJACAIRUH3n6jx2iDIQCXuJhDk/QjgV6v7AI5e/uO30OumwYpebQLMlekz27QtYIoNcgsGeQ==
   </data>
  </layer>
  <layer name="Trigger" width="70" height="15">
   <data encoding="base64" compression="zlib">
    eJztzjENAAAIA7D5t4Q5DOwnJK2CJgAAfDTXAQAoFueEALw=
+  </data>
+ </layer>
+ <layer name="Health" width="70" height="15" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzt0jENAAAMw7DyJzVqI9B/mmQjyJEE/pnrAIgPAQCgWZqeAX8=
   </data>
  </layer>
 </map>

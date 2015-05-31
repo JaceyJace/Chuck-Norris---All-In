@@ -62,7 +62,7 @@ Enemy.prototype.update = function(deltaTime)
 		}
 		this.position.x = Math.floor(this.position.x + (deltaTime * this.velocity.x));
 		this.velocity.x = bound(this.velocity.x + (deltaTime * ddx),
-			-ENEMY_MAXDX, ENEMY_MAXDX);
+								-ENEMY_MAXDX, ENEMY_MAXDX);
 	}
 }
 
