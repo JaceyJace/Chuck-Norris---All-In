@@ -58,13 +58,10 @@ var keyboard = new Keyboard();
 
 //HUD var
 var score = 0;
+var money = 0;
 var lives = 3;
 var chuckHead = document.createElement("img");
 	chuckHead.src = "chuckHead.png";
-
-var health = document.createElement("img");
-	health.src = "health.png";
-
 
 //set tile
 var TILE = 35;
@@ -102,7 +99,11 @@ var ENEMY_ACCEL = ENEMY_MAXDX * 2;
 var enemies = [];
 var LAYER_OBJECT_ENEMIES = 3; 
 var LAYER_OBJECT_TRIGGERS = 4; 
-var LAYER_OBJECT_TRIGGERSHEALTH = 5;
+
+//coin stuff
+var LAYER_OBJECT_COINS = 5;
+var coins = [];
+
 
 var splashTimer = 3
 function runSplash(deltaTime)
@@ -276,6 +277,22 @@ function initialize()
 				idx++;
 			}
 		}
+		//add coins
+		idx = 0;
+		for(var y = 0; y < level1.layers[LAYER_OBJECT_COINS].height; y++)
+		{
+			for(var x = 0; x < level1.layers[LAYER_OBJECT_COINS].width; x++)
+			{
+				if(level1.layers[LAYER_OBJECT_COINS].data[idx] != 0)
+				{
+					var px = tileToPixel(x);
+					var py = tileToPixel(y);
+					var c = new Coin(px, py);
+					coins.push(c);
+				}
+				idx++;
+			}
+		}
 
 		/*//add ladder
 		idx = 0;
@@ -337,6 +354,11 @@ function runGame(deltaTime)
 		enemies[i].update(deltaTime);
 	}
 
+	for(var i=0; i<coins.length; i++)
+	{
+		coins[i].update(deltaTime);
+	}
+
 	//update bullets
 	var hit = false;
 	for(var i=0; i<bullets.length; i++)
@@ -385,6 +407,17 @@ function runGame(deltaTime)
 				}
 			}
 		}
+		//increase coin count - up in 3
+		for(var i=0; i<coins.length; i++)
+		{
+			if(intersects(coins[i].position.x, coins[i].position.y, TILE, TILE,
+					player.position.x, player.position.y, player.width/2, player.height/2)== true)
+			{
+				money += 1; //increases by 3. dont know why and cant fix it :(
+				coins.splice(i, 1);
+				break;
+			}
+		}
 
 	//DRAW
 	drawMap();
@@ -395,10 +428,13 @@ function runGame(deltaTime)
 		enemies[i].draw(deltaTime);
 	}
 	
-	
 	for(var i=0; i<bullets.length; i++)
 	{
 		bullets[i].draw(deltaTime);
+	}
+	for(var i=0; i<coins.length; i++)
+	{
+		coins[i].draw(deltaTime);
 	}
 
 	//set lives
@@ -424,6 +460,33 @@ function runGame(deltaTime)
 		if(respawnTimer <= 0)
 		{}*/
 	}
+		// update the frame counter 
+	fpsTime += deltaTime;
+	fpsCount++;
+	if(fpsTime >= 1)
+	{
+		fpsTime -= 1;
+		fps = fpsCount;
+		fpsCount = 0;
+	}		
+	
+	// draw the FPS
+	context.fillStyle = "#f00";
+	context.font="14px Arial";
+	context.fillText("FPS: " + fps, 5, 20, 100);
+
+	//set the score
+	context.fillStyle = "#544848"
+	context.font = "20px Arial";
+	var scoreText = "Score: " + score;
+	context.fillText(scoreText, 550, 20);
+
+	//set the coins
+	context.fillStyle = "#FBFB05";
+	context.font = "20px Arial";
+	var moneyText = "Coins: " + money;
+	context.fillText(moneyText, 550, 500);
+
 }
 
 var endTimer = 5
@@ -466,7 +529,7 @@ function runGameWin(deltaTime, x, y)
 
 function run()
 {
-	context.fillStyle = "#ccc";		
+	context.fillStyle = "#080808";		
 	context.fillRect(0, 0, canvas.width, canvas.height);
 	
 	var deltaTime = getDeltaTime();
@@ -486,27 +549,6 @@ function run()
 				runGameWin(deltaTime);
 				break;
 	}
-	// update the frame counter 
-	fpsTime += deltaTime;
-	fpsCount++;
-	if(fpsTime >= 1)
-	{
-		fpsTime -= 1;
-		fps = fpsCount;
-		fpsCount = 0;
-	}		
-	
-	// draw the FPS
-	context.fillStyle = "#f00";
-	context.font="14px Arial";
-	context.fillText("FPS: " + fps, 5, 20, 100);
-
-	//set the score
-	context.fillStyle = "#f30426"
-	context.font = "18px Arial";
-	var scoreText = "Score: " + score;
-	context.fillText(scoreText, 560, 20)
-
 }
 
 initialize();

@@ -153,10 +153,6 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 				this.sprite.setAnimation(ANIM_SHOOT_RIGHT);
 		}
 
-//they will need the players position as reference and their own so you can offset it so they will appear to be following
-//Aaron Roff: set bullet to where it needs to, if player is left to it have it -= velocity, if he is right of it += velocity
-//or velocity += player position
-
 		if(right == true)
 		{
 			tempBullet.velocity.x = 400; //set direction for bullet
@@ -172,6 +168,7 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 		bullets.push(tempBullet);		//add bullet to bullets array
 	}
 
+	//player to stop jiggle
 	var wasleft = this.velocity.x < 0;
 	var wasright = this.velocity.x > 0;
 	var falling = this.falling;
@@ -332,10 +329,10 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 		case STATE_CLIMB:
 			player.gameStateClimb(deltaTime, left);
 		break;
-	}*/
+	}
 }	
 
-/*Player.prototype.gameStateRunJump = function(deltaTime, left)
+Player.prototype.gameStateRunJump = function(deltaTime, left)
 {
 	if(this.falling == false)
 	{
@@ -348,19 +345,31 @@ Player.prototype.update = function(deltaTime, moveRight, BULLET_SPEED)
 
 Player.prototype.gameStateClimb = function(deltaTime, left)
 {
-	/*if(this.falling == false && this.jumping == false && left == false && right == false)
+	var wasmoveup = false;
+	var wasmovedown = false;
+
+	if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
 	{
-		if(keyboard.isKeyDown(keyboard.KEY_UP) == true)
-		{
-			up = true;
-			if(this.sprite.currentAnimation != ANIM_CLIMB)
-				this.sprite.setAnimation(ANIM_CLIMB);
-			{
-				this.velocity.y = 0;
-			}
-		}
+		climb.up = true;
+		if(this.sprite.currentAnimation != ANIM_CLIMB)
+			this.sprite.setAnimation(ANIM_CLIMB);
 	}
-}*/
+	if(keyboard.isKeyDown(keyboard.KEY_DOWN)== true)
+	{
+		climb.down = true;
+		if(this.sprite.currentAnimation != ANIM_CLIMB)
+			this.sprite.setAnimation(ANIM_CLIMB);
+	}
+	if(this.velocity.y > 0)
+	{
+		wasmoveup = true;
+	}
+	if(this.velocity < 0)
+	{
+		wasmovedown = true;
+	}*/
+	
+}
 
 Player.prototype.draw = function()
 {
