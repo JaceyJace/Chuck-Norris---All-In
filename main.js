@@ -108,9 +108,9 @@ var coins = [];
 var splashTimer = 3
 function runSplash(deltaTime)
 {
-	var chukystart = document.createElement("img");
-	chukystart.src = "chukystart.png";
-	context.drawImage(chukystart, 0, 0);
+	var StartGame = document.createElement("img");
+	StartGame.src = "StartGame.png";
+	context.drawImage(StartGame, 0, 0);
 
 	splashTimer -= deltaTime
 	if(splashTimer <= 0)
@@ -254,6 +254,17 @@ function initialize()
 				idx++;
 			}
 		}
+		//allows you to take one shot at bat to kill instead of 3 -- but removes some other enemies??
+		for( var i = 0; i < enemies.length; i++ )
+        {
+            for( var j = 0; j < enemies.length; j++)
+            {
+                if(enemies[i].position.x == enemies[j].position.x && enemies[i].position.y == enemies[j].position.y)
+                {
+                enemies.splice(i, 1)
+                }
+            }
+        }
 		//trigger layer in collision map - for the door to finish the game
 		cells[LAYER_OBJECT_TRIGGERS] = [];
 		idx = 0;
@@ -293,6 +304,17 @@ function initialize()
 				idx++;
 			}
 		}
+		//stops player from collecting more than one coin per pick up -- but removes some other coins??
+		for( var i = 0; i < coins.length; i++ )
+        {
+            for( var j = 0; j < coins.length; j++)
+            {
+                if(coins[i].position.x == coins[j].position.x && coins[i].position.y == coins[j].position.y)
+                {
+                coins.splice(i, 1)
+                }
+            }
+        }
 
 		/*//add ladder
 		idx = 0;
@@ -413,7 +435,7 @@ function runGame(deltaTime)
 			if(intersects(coins[i].position.x, coins[i].position.y, TILE, TILE,
 					player.position.x, player.position.y, player.width/2, player.height/2)== true)
 			{
-				money += 1; //increases by 3. dont know why and cant fix it :(
+				score += 1; //increases by 3. dont know why and cant fix it :(
 				coins.splice(i, 1);
 				break;
 			}
@@ -480,23 +502,29 @@ function runGame(deltaTime)
 	context.font = "20px Arial";
 	var scoreText = "Score: " + score;
 	context.fillText(scoreText, 550, 20);
-
-	//set the coins
-	context.fillStyle = "#FBFB05";
-	context.font = "20px Arial";
-	var moneyText = "Coins: " + money;
-	context.fillText(moneyText, 550, 500);
-
 }
 
 var endTimer = 5
-function runGameOver(deltaTime, x, y)
+function runGameOver(deltaTime, x, y, moneyText)
 {
-	var chukystart = document.createElement("img");
-	chukystart.src = "chukystartOver.png";
-	context.drawImage(chukystart, 0, 0);
+	var GameOver = document.createElement("img");
+	GameOver.src = "GameOver.png";
+	context.drawImage(GameOver, 0, 0);
 
-	endTimer -= deltaTime
+	context.fillStyle = "#F20C0C";
+	context.font = "45px Arial";
+	context.fillText("GAME OVER", 180, 250);
+
+	context.fillStyle = "#F20C0C";
+	context.font = "20px Arial";
+	context.fillText("Score: " + score, 260, 290);
+
+	//because i dont know how to reset the game so all enemies & Coins come back to life
+	context.fillStyle = "#F20C0C";
+	context.font = "20px Arial";
+	context.fillText("Refresh To Play Again", 200, 500);
+
+	/*endTimer -= deltaTime
 	if(endTimer <= 0)
 	{
 		player.position.set(1*35, 12*35);
@@ -504,7 +532,7 @@ function runGameOver(deltaTime, x, y)
 		lives = 3;
 		gameState = STATE_GAME;
 		return;
-	}
+	}*/
 	
 
 }
@@ -513,23 +541,36 @@ function runGameWin(deltaTime, x, y)
 {
 	endTimer -= deltaTime
 		
-	var chukystart = document.createElement("img");
-	chukystart.src = "chukystart.png";
-	context.drawImage(chukystart, 0, 0);
+	var GameWin = document.createElement("img");
+	GameWin.src = "GameWin.png";
+	context.drawImage(GameWin, 0, 0);
 
-	if(endTimer <= 0)
+	context.fillStyle = "#F20C0C";
+	context.font = "45px Arial";
+	context.fillText("YOU WIN", 180, 250);
+
+	context.fillStyle = "#F20C0C";
+	context.font = "20px Arial";
+	context.fillText("Score: " + score, 260, 290);
+
+	//because i dont know how to reset the game so all enemies & Coins come back to life
+	context.fillStyle = "#F20C0C";
+	context.font = "20px Arial";
+	context.fillText("Refresh To Play Again", 170, 500);
+
+	/*if(endTimer <= 0)
 	{
 		player.position.set(1*35, 12*35);
 		score = 0;
 		lives = 3;
 		gameState = STATE_SPLASH;
 		return;
-	}
+	}*/
 }
 
 function run()
 {
-	context.fillStyle = "#080808";		
+	context.fillStyle = "#AEA7A7";		
 	context.fillRect(0, 0, canvas.width, canvas.height);
 	
 	var deltaTime = getDeltaTime();
