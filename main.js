@@ -238,101 +238,101 @@ function initialize()
 				idx++;
 			}
 		}
-		//add enemies
-		idx = 0;
-		for(var y = 0; y < level1.layers[LAYER_OBJECT_ENEMIES].height; y++)
-		{
-			for(var x = 0; x < level1.layers[LAYER_OBJECT_ENEMIES].width; x++)
-			{
-				if(level1.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0)
-				{
-					var px = tileToPixel(x);
-					var py = tileToPixel(y);
-					var e = new Enemy(px, py);
-					enemies.push(e);
-				}
-				idx++;
-			}
-		}
-		//allows you to take one shot at bat to kill instead of 3 -- but removes some other enemies??
-		for( var i = 0; i < enemies.length; i++ )
-        {
-            for( var j = 0; j < enemies.length; j++)
-            {
-                if(enemies[i].position.x == enemies[j].position.x && enemies[i].position.y == enemies[j].position.y)
-                {
-                enemies.splice(i, 1)
-                }
-            }
-        }
-		//trigger layer in collision map - for the door to finish the game
-		cells[LAYER_OBJECT_TRIGGERS] = [];
-		idx = 0;
-		for(var y = 0; y < level1.layers[LAYER_OBJECT_TRIGGERS].height; y++)
-		{
-			cells[LAYER_OBJECT_TRIGGERS][y] = [];
-			for(var x = 0; x < level1.layers[LAYER_OBJECT_TRIGGERS].width; x++)
-			{
-				if(level1.layers[LAYER_OBJECT_TRIGGERS].data[idx] != 0)
-				{
-					cells[LAYER_OBJECT_TRIGGERS][y][x] = 1;
-					cells[LAYER_OBJECT_TRIGGERS][y-1][x] = 1;
-					cells[LAYER_OBJECT_TRIGGERS][y-1][x+1] = 1;
-					cells[LAYER_OBJECT_TRIGGERS][y][x+1] = 1;
-				}
-				else if(cells[LAYER_OBJECT_TRIGGERS][y][x] != 1)
-				{
-					//if we havent wet this cells value then set it to 0 now
-					cells[LAYER_OBJECT_TRIGGERS][y][x] = 0;
-				}
-				idx++;
-			}
-		}
-		//add coins
-		idx = 0;
-		for(var y = 0; y < level1.layers[LAYER_OBJECT_COINS].height; y++)
-		{
-			for(var x = 0; x < level1.layers[LAYER_OBJECT_COINS].width; x++)
-			{
-				if(level1.layers[LAYER_OBJECT_COINS].data[idx] != 0)
-				{
-					var px = tileToPixel(x);
-					var py = tileToPixel(y);
-					var c = new Coin(px, py);
-					coins.push(c);
-				}
-				idx++;
-			}
-		}
-		//stops player from collecting more than one coin per pick up -- but removes some other coins??
-		for( var i = 0; i < coins.length; i++ )
-        {
-            for( var j = 0; j < coins.length; j++)
-            {
-                if(coins[i].position.x == coins[j].position.x && coins[i].position.y == coins[j].position.y)
-                {
-                coins.splice(i, 1)
-                }
-            }
-        }
-
-		/*//add ladder
-		idx = 0;
-		for(var y = 0; y < level1.layers[LAYER_LADDERS].height; y++)
-		{
-			for(var x = 0; x < level1.layers[LAYER_LADDERS].width; x++)
-			{
-				if(level1.layers[LAYER_LADDERS].data[idx] != 0)
-				{
-					var px = tileToPixel(x);
-					var py = tileToPixel(y);
-					var e = new Player(px, py);
-				}
-				idx++;
-			}
-		}*/
-
 	}
+	//add enemies
+	idx = 0;
+	for(var y = 0; y < level1.layers[LAYER_OBJECT_ENEMIES].height; y++)
+	{
+		for(var x = 0; x < level1.layers[LAYER_OBJECT_ENEMIES].width; x++)
+		{
+			if(level1.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0)
+			{
+				var px = tileToPixel(x);
+				var py = tileToPixel(y);
+				var e = new Enemy(px, py);
+				enemies.push(e);
+			}
+			idx++;
+		}
+	}
+	//allows you to take one shot at bat to kill instead of 3 -- but removes some other enemies??
+	for( var i = 0; i < enemies.length; i++ )
+    {
+        for( var j = 0; j < enemies.length; j++)
+        {
+            if(enemies[i].position.x == enemies[j].position.x && enemies[i].position.y == enemies[j].position.y)
+            {
+            enemies.splice(i, 1)
+            }
+        }
+    }
+	//trigger layer in collision map - for the door to finish the game
+	cells[LAYER_OBJECT_TRIGGERS] = [];
+	idx = 0;
+	for(var y = 0; y < level1.layers[LAYER_OBJECT_TRIGGERS].height; y++)
+	{
+		cells[LAYER_OBJECT_TRIGGERS][y] = [];
+		for(var x = 0; x < level1.layers[LAYER_OBJECT_TRIGGERS].width; x++)
+		{
+			if(level1.layers[LAYER_OBJECT_TRIGGERS].data[idx] != 0)
+			{
+				cells[LAYER_OBJECT_TRIGGERS][y][x] = 1;
+				cells[LAYER_OBJECT_TRIGGERS][y-1][x] = 1;
+				cells[LAYER_OBJECT_TRIGGERS][y-1][x+1] = 1;
+				cells[LAYER_OBJECT_TRIGGERS][y][x+1] = 1;
+			}
+			else if(cells[LAYER_OBJECT_TRIGGERS][y][x] != 1)
+			{
+				//if we havent wet this cells value then set it to 0 now
+				cells[LAYER_OBJECT_TRIGGERS][y][x] = 0;
+			}
+			idx++;
+		}
+	}
+	//add coins
+	idx = 0;
+	for(var y = 0; y < level1.layers[LAYER_OBJECT_COINS].height; y++)
+	{
+		for(var x = 0; x < level1.layers[LAYER_OBJECT_COINS].width; x++)
+		{
+			if(level1.layers[LAYER_OBJECT_COINS].data[idx] != 0)
+			{
+				var px = tileToPixel(x);
+				var py = tileToPixel(y);
+				var c = new Coin(px, py);
+				coins.push(c);
+			}
+			idx++;
+		}
+	}
+	/*stops player from collecting more than one coin per pick up -- but removes some other coins??
+	for( var i = 0; i < coins.length; i++ )
+    {
+        for( var j = 0; j < coins.length; j++)
+        {
+            if(coins[i].position.x == coins[j].position.x && coins[i].position.y == coins[j].position.y)
+            {
+            coins.splice(i, 1)
+            }
+        }
+    }*/
+
+	/*//add ladder
+	idx = 0;
+	for(var y = 0; y < level1.layers[LAYER_LADDERS].height; y++)
+	{
+		for(var x = 0; x < level1.layers[LAYER_LADDERS].width; x++)
+		{
+			if(level1.layers[LAYER_LADDERS].data[idx] != 0)
+			{
+				var px = tileToPixel(x);
+				var py = tileToPixel(y);
+				var e = new Player(px, py);
+			}
+			idx++;
+		}
+	}*/
+
 	musicBackground = new Howl(
 	{
 		urls: ["background.ogg"],
